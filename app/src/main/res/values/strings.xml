@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Macros Calculator</string>
+    <string name="title">Mac Calculator</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    <string name="enterHeight">Enter Height(cm)</string>
+    <string name="enterWeight">Enter Weight(kg)</string>
+    <string name="enterAge">Enter Age</string>
+    <string name="BtnNext">Next</string>
+    <string name="gender">Gender:</string>
+    <string name="add">Add</string>
+    <string name="loading">Loading…</string>
+    <string name="btnMC">Macros Calculator</string>
+    <string name="btnFN">Fit Notes</string>
+    <string name="btnRec">Recipes</string>
+    <string name="btnEdit">Edit</string>
+    <string name="btnGuides">Exercise Guides</string>
+    <string name="Choose">Choose food :</string>
+    <string name="age">Age:</string>
+    <string name="weight">Weight(kg):</string>
+    <string name="height">Height(cm):</string>
+    <string name="edit">Edit Measurements</string>
+</resources>
