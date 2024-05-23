@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="48dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/enterHeight"
         android:textAlignment="center"
@@ -94,11 +94,12 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/gender"
+        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,18 +109,18 @@
     <RadioGroup
         android:id="@+id/radioSex"
         android:layout_width="94dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:layout_below="@id/enterAge"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8">
 
         <RadioButton
             android:id="@+id/radioMale"
-            android:layout_width="74dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="@string/radio_male"
@@ -127,8 +128,9 @@
 
         <RadioButton
             android:id="@+id/radioFemale"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="@string/radio_female"
             android:textColor="@color/white" />
@@ -138,13 +140,14 @@
         android:id="@+id/textViewActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="How many days in the week are you training?"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/radioActivity"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioSex" />
 
@@ -152,13 +155,12 @@
         android:id="@+id/radioActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewActivity">
 
         <RadioButton
             android:id="@+id/option1"
@@ -200,7 +202,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="76dp"
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/gray"
         android:fontFamily="sans-serif-condensed-medium"

@@ -1,12 +1,16 @@
 package com.example.macroscalculator;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +44,9 @@ SharedPreferences sp;
         sp.edit().remove("activity").commit();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+    public void btnAddClick(View view){
+    showAddMealDialog();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,5 +96,41 @@ SharedPreferences sp;
         txtViewLose = (TextView) findViewById(R.id.weightLossCaloriesTextView);
         txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
         dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
+    }
+    private void showAddMealDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
+        builder.setView(dialogView);
+        final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button positiveButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button negativeButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                positiveButton.setTextColor(getResources().getColor(R.color.white));
+                negativeButton.setTextColor(getResources().getColor(R.color.white));
+            }
+        });
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(layoutParams);
+        dialog.show();
     }
 }

@@ -64,7 +64,8 @@
                 android:scaleX="1.2"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="btnAddClick"/>
             <ImageView
                 android:id="@+id/imgViewEdit"
                 android:layout_width="48dp"

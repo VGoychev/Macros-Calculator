@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/MyFitnessDefault">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/txtViewMenu"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Menu"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+            <ImageView
+                android:id="@+id/imgAddNewItem"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_toRightOf="@id/txtViewMenu"
+                android:src="@drawable/dish"
+                android:textColor="@color/black"
+                android:onClick="imgAddClick"/>
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_meal_items"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/txtViewMenu"/>
+</LinearLayout>
