@@ -26,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private double height;
     private double weight;
     private double age;
+    private double selectedRadioActivity;
     String selectedRadiobut;
     Button button;
-    RadioButton radioMale, radioFemale;
-    RadioGroup radioGroup;
+    RadioButton radioMale, radioFemale, radioButtonOpt1, radioButtonOpt2, radioButtonOpt3, radioButtonOpt4;
+    RadioGroup radioGroup, radioGroupActivity;
     SharedPreferences sp;
 
     private boolean heightIsValid() {
@@ -116,7 +117,22 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
+    private boolean activityIsSelected(){
+        if(radioGroupActivity.getCheckedRadioButtonId() == -1){
+            Toast.makeText(this, "Please select activity level", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (radioButtonOpt1.isChecked()) {
+            selectedRadioActivity = 1.2;
+        } else if (radioButtonOpt2.isChecked()) {
+            selectedRadioActivity = 1.375;
+        } else if (radioButtonOpt3.isChecked()) {
+            selectedRadioActivity = 1.55;
+        } else if (radioButtonOpt4.isChecked()) {
+            selectedRadioActivity = 1.725;
+        }
+        return true;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        if (sp.contains("height") && sp.contains("weight") && sp.contains("age") && sp.contains("gender")) {
+        if (sp.contains("height") && sp.contains("weight") && sp.contains("age") && sp.contains("gender") && sp.contains("activity")) {
             // Values are stored, navigate to MainMenu directly
             Intent intent = new Intent(MainActivity.this, MacrosCalculator.class);
             startActivity(intent);
@@ -138,20 +154,25 @@ public class MainActivity extends AppCompatActivity {
             enterWeight = findViewById(R.id.enterWeight);
             enterAge = findViewById(R.id.enterAge);
             radioGroup = findViewById(R.id.radioSex);
+            radioGroupActivity = findViewById(R.id.radioActivity);
+            radioButtonOpt1 = findViewById(R.id.option1);
+            radioButtonOpt2 = findViewById(R.id.option2);
+            radioButtonOpt3 = findViewById(R.id.option3);
+            radioButtonOpt4 = findViewById(R.id.option4);
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (heightIsValid() & weightIsValid() & ageIsValid() & genderIsSelected()) {
+                    if (heightIsValid() & weightIsValid() & ageIsValid() & genderIsSelected() & activityIsSelected()) {
                         height = Double.parseDouble(enterHeight.getText().toString().trim());
                         weight = Double.parseDouble(enterWeight.getText().toString().trim());
                         age = Double.parseDouble(enterAge.getText().toString().trim());
-
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("height", String.valueOf((int) height));
                         editor.putString("weight", String.valueOf((int) weight));
                         editor.putString("age", String.valueOf((int) age));
                         editor.putString("gender", selectedRadiobut);
+                        editor.putString("activity", String.valueOf((double)selectedRadioActivity));
                         editor.commit();
 
                         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
