@@ -33,7 +33,7 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_meal_items"
+        android:id="@+id/recyclerDialog_meal_items"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@id/txtViewMenu"/>
