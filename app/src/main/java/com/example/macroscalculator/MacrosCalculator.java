@@ -2,6 +2,9 @@ package com.example.macroscalculator;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,10 +16,19 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.macroscalculator.database.DefaultMeals;
+import com.example.macroscalculator.database.FoodMenuItem;
+import com.example.macroscalculator.database.FoodMenuItemDao;
+import com.example.macroscalculator.database.MealAdapter;
+import com.example.macroscalculator.database.MealMenuAdapter;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MacrosCalculator extends AppCompatActivity {
 Button btnAdd;
@@ -26,6 +38,10 @@ Calendar calendar;
 SimpleDateFormat dateFormat;
 String date;
 SharedPreferences sp;
+AppDatabase db;
+FoodMenuItemDao foodMenuItemDao;
+RecyclerView recyclerViewTodayMeals;
+MealAdapter mealAdapter;
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
     final double MALE_HEIGHT_MULT = 4.799;
@@ -55,6 +71,10 @@ SharedPreferences sp;
         sp = getApplicationContext().getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
         findViews();
 
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "DB_NAME").allowMainThreadQueries().build();
+        foodMenuItemDao = db.foodMenuItemDao();
+
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         date = dateFormat.format(calendar.getTime());
@@ -83,6 +103,9 @@ SharedPreferences sp;
         txtViewGain.setText("To gain weight: " + String.format("%.0f", caloriesForWeightGain) + " calories/day");
         txtViewLose.setText("To lose weight: " + String.format("%.0f", caloriesForWeightLoss) + " calories/day");
 
+        recyclerViewTodayMeals.setLayoutManager(new LinearLayoutManager(this));
+        mealAdapter = new MealAdapter(new ArrayList<>());
+        recyclerViewTodayMeals.setAdapter(mealAdapter);
     }
     public void findViews(){
         imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
@@ -96,26 +119,36 @@ SharedPreferences sp;
         txtViewLose = (TextView) findViewById(R.id.weightLossCaloriesTextView);
         txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
         dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
+        recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
     }
     private void showAddMealDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
         builder.setView(dialogView);
+
+
         final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        RadioGroup radioGroupQuantities = dialogView.findViewById(R.id.radioGroupQuantities);
+        RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
+        recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
+        List<FoodMenuItem> defaultMeals = DefaultMeals.getDefaultMeals();
+        MealMenuAdapter menuAdapter = new MealMenuAdapter(defaultMeals);
+        recyclerViewMeals.setAdapter(menuAdapter);
 
 
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+                    int selectedQuantity = getSelectedQuantity(radioGroupQuantities);
+                    FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
+                    if (selectedMeal != null) {
+                        FoodMenuItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
+                        ((MealAdapter) mealAdapter).addMeal(mealToAdd);
+                        updateTotalValues();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -126,11 +159,47 @@ SharedPreferences sp;
                 negativeButton.setTextColor(getResources().getColor(R.color.white));
             }
         });
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialog.getWindow().setAttributes(layoutParams);
         dialog.show();
+    }
+
+    private int getSelectedQuantity(RadioGroup radioGroup) {
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        if (selectedId == R.id.radio200g) {
+            mealAdapter.setSelectedGrams(200);
+            return 200;
+        } else if (selectedId == R.id.radio300g) {
+            mealAdapter.setSelectedGrams(300);
+            return 300;
+        }
+        mealAdapter.setSelectedGrams(100);
+        return 100;
+    }
+    private FoodMenuItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
+        FoodMenuItem newMeal = new FoodMenuItem(meal.mealName,
+                (meal.kcal * quantity) / 100,
+                (meal.fats * quantity) / 100,
+                (meal.carbs * quantity) / 100,
+                (meal.proteins * quantity) / 100);
+        return newMeal;
+    }
+    private void updateTotalValues() {
+        List<FoodMenuItem> meals = mealAdapter.getMeals(); // Get the list of meals from the adapter
+        int totalKcal = 0;
+        double totalFats = 0;
+        double totalCarbs = 0;
+        double totalProteins = 0;
+
+        for (FoodMenuItem meal : meals) {
+            totalKcal += meal.getKcal();
+            totalFats += meal.getFats();
+            totalCarbs += meal.getCarbs();
+            totalProteins += meal.getProteins();
+        }
+
+        // Update the TextView with the total values
+        txtViewTotal.setText("Total - " + totalKcal + "kcal " +
+                totalFats + "g fats " +
+                totalCarbs + "g carbs " +
+                totalProteins +"g proteins");
     }
 }

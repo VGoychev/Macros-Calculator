@@ -159,7 +159,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp" />
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_food_items"
+            android:id="@+id/recyclerViewTodayMeals"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:textSize="14dp"

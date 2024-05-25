@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/RecipeCard">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -32,9 +34,44 @@
                 android:onClick="imgAddClick"/>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerDialog_meal_items"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_below="@id/txtViewMenu"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="8dp"
+        android:background="@android:color/transparent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMeals"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/txtViewMenu"
+        android:background="@color/RecipeCard"/>
+    </androidx.cardview.widget.CardView>
+    <RadioGroup
+        android:id="@+id/radioGroupQuantities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <RadioButton
+            android:id="@+id/radio100g"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100g"
+            android:checked="true"
+            android:textColor="@color/white" />
+        <RadioButton
+            android:id="@+id/radio200g"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200g"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/radio300g"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="300g"
+            android:textColor="@color/white"/>
+    </RadioGroup>
 </LinearLayout>
