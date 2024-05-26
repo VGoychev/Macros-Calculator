@@ -1,11 +1,7 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
 
 @Entity
 public class FoodMenuItem {
@@ -17,6 +13,7 @@ public class FoodMenuItem {
     public double proteins;
     public double carbs;
     public String date;
+    public int quantity;
 
     public FoodMenuItem(String mealName, double kcal, double fats, double carbs, double proteins, String date) {
         this.mealName = mealName;
@@ -25,6 +22,7 @@ public class FoodMenuItem {
         this.carbs = carbs;
         this.proteins = proteins;
         this.date = date;
+        this.quantity = 100;
     }
     public String getMealName(){
         return mealName;
@@ -47,7 +45,9 @@ public class FoodMenuItem {
     public String getDate() {
         return date;
     }
-
+    public int getQuantity(){
+        return quantity;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -74,5 +74,8 @@ public class FoodMenuItem {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

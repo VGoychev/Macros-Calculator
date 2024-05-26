@@ -1,4 +1,4 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -12,6 +12,8 @@ import java.util.List;
 public interface FoodMenuItemDao {
 @Insert
     void insert(FoodMenuItem foodMenuItem);
+@Delete
+    void delete(FoodMenuItem foodMenuItem);
 @Query("SELECT * FROM FoodMenuItem WHERE date = :date")
     List<FoodMenuItem> getMealsByDate(String date);
 @Query("DELETE FROM FoodMenuItem WHERE date = :date")

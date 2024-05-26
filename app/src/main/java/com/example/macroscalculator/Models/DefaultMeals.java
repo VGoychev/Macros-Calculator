@@ -1,8 +1,6 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class DefaultMeals {

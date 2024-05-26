@@ -1,4 +1,4 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
 import android.graphics.Color;
 import android.view.Gravity;

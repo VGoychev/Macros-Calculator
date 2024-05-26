@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.macroscalculator.database.FoodItem;
-import com.example.macroscalculator.database.FoodItemDao;
-import com.example.macroscalculator.database.FoodMenuItem;
-import com.example.macroscalculator.database.FoodMenuItemDao;
+import com.example.macroscalculator.Models.FoodItem;
+import com.example.macroscalculator.Models.FoodItemDao;
+import com.example.macroscalculator.Models.FoodMenuItem;
+import com.example.macroscalculator.Models.FoodMenuItemDao;
 
 @Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

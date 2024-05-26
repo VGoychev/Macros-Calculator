@@ -1,4 +1,4 @@
-package com.example.macroscalculator.database;
+package com.example.macroscalculator.Models;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,14 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     public MealAdapter(List<FoodMenuItem> meals) {
         this.meals = meals;
     }
+    public FoodMenuItem getMealAt(int position) {
+        return meals.get(position);
+    }
+
+    public void removeMeal(int position) {
+        meals.remove(position);
+        notifyItemRemoved(position);
+    }
     @NonNull
     @Override
     public MealAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -29,15 +37,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     @Override
     public void onBindViewHolder(@NonNull MealAdapter.MealViewHolder holder, int position) {
         FoodMenuItem meal = meals.get(position);
-        String mealNameWithGrams = getMealNameWithGrams(meal, selectedGrams);
+        String mealNameWithGrams = meal.getMealName() + " (" + meal.getQuantity() + "g)";
         holder.mealName.setText(mealNameWithGrams);
         holder.kcalTextView.setText(String.format("%.0f kcal", meal.getKcal()));
         holder.fatsTextView.setText(String.format("%.0fg fats", meal.getFats()));
         holder.carbsTextView.setText(String.format("%.0fg carbs", meal.getCarbs()));
         holder.proteinsTextView.setText(String.format("%.0fg proteins", meal.getProteins()));
-    }
-    private String getMealNameWithGrams(FoodMenuItem meal, int grams) {
-        return meal.getMealName() + " (" + grams + "g)";
     }
     private int selectedGrams = 100; // Default to 100g
 

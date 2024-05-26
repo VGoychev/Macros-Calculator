@@ -1,7 +1,9 @@
 package com.example.macroscalculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -13,17 +15,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.macroscalculator.database.DefaultMeals;
-import com.example.macroscalculator.database.FoodMenuItem;
-import com.example.macroscalculator.database.FoodMenuItemDao;
-import com.example.macroscalculator.database.MealAdapter;
-import com.example.macroscalculator.database.MealMenuAdapter;
+import com.example.macroscalculator.Models.DefaultMeals;
+import com.example.macroscalculator.Models.FoodMenuItem;
+import com.example.macroscalculator.Models.FoodMenuItemDao;
+import com.example.macroscalculator.Models.MealAdapter;
+import com.example.macroscalculator.Models.MealMenuAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ MealAdapter mealAdapter;
         }
         updateTotalValues();
     }
+
     public void findViews(){
         imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
         btnAdd = (Button) findViewById(R.id.button_macros_add);
@@ -127,6 +129,25 @@ MealAdapter mealAdapter;
         txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
         dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
         recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
+        itemTouchHelper.attachToRecyclerView(recyclerViewTodayMeals);
+    }
+    private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+        SwipeToDeleteCallback() {
+            super(0, ItemTouchHelper.LEFT);
+        }
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            FoodMenuItem meal = mealAdapter.getMealAt(position);
+            mealAdapter.removeMeal(position);
+            foodMenuItemDao.delete(meal);
+            updateTotalValues();
+        }
     }
     private void showAddMealDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
@@ -185,12 +206,13 @@ MealAdapter mealAdapter;
         return 100;
     }
     private FoodMenuItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
-        FoodMenuItem newMeal = new FoodMenuItem(meal.mealName,
-                (meal.kcal * quantity) / 100,
-                (meal.fats * quantity) / 100,
-                (meal.carbs * quantity) / 100,
-                (meal.proteins * quantity) / 100,
-                meal.date);
+        FoodMenuItem newMeal = new FoodMenuItem(meal.getMealName(),
+                (meal.getKcal() * quantity) / 100,
+                (meal.getFats() * quantity) / 100,
+                (meal.getCarbs() * quantity) / 100,
+                (meal.getProteins() * quantity) / 100,
+                meal.getDate());
+        newMeal.setQuantity(quantity);
         return newMeal;
     }
     private void updateTotalValues() {
