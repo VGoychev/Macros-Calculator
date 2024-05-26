@@ -57,8 +57,8 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         return meals;
     }
     public static class MealViewHolder extends RecyclerView.ViewHolder {
-        private TextView mealName;
-        private TextView kcalTextView, fatsTextView, carbsTextView, proteinsTextView;
+        private final TextView mealName;
+        private final TextView kcalTextView, fatsTextView, carbsTextView, proteinsTextView;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);

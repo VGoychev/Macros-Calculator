@@ -68,8 +68,8 @@
                 android:onClick="btnAddClick"/>
             <ImageView
                 android:id="@+id/imgViewEdit"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="44dp"
                 android:src="@drawable/edit"
                 android:padding="4dp"
                 android:layout_toLeftOf="@id/button_macros_add"

@@ -106,6 +106,13 @@ MealAdapter mealAdapter;
         recyclerViewTodayMeals.setLayoutManager(new LinearLayoutManager(this));
         mealAdapter = new MealAdapter(new ArrayList<>());
         recyclerViewTodayMeals.setAdapter(mealAdapter);
+
+        String currentDate = dateFormat.format(calendar.getTime());
+        List<FoodMenuItem> savedMeals = foodMenuItemDao.getMealsByDate(currentDate);
+        for (FoodMenuItem meal : savedMeals) {
+            mealAdapter.addMeal(meal);
+        }
+        updateTotalValues();
     }
     public void findViews(){
         imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
@@ -132,7 +139,7 @@ MealAdapter mealAdapter;
         RadioGroup radioGroupQuantities = dialogView.findViewById(R.id.radioGroupQuantities);
         RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
         recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
-        List<FoodMenuItem> defaultMeals = DefaultMeals.getDefaultMeals();
+        List<FoodMenuItem> defaultMeals = DefaultMeals.getDefaultMeals(dateFormat.format(calendar.getTime()));
         MealMenuAdapter menuAdapter = new MealMenuAdapter(defaultMeals);
         recyclerViewMeals.setAdapter(menuAdapter);
 
@@ -142,8 +149,11 @@ MealAdapter mealAdapter;
                     int selectedQuantity = getSelectedQuantity(radioGroupQuantities);
                     FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
                     if (selectedMeal != null) {
+                        String currentDate = dateFormat.format(calendar.getTime());
                         FoodMenuItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
+                        mealToAdd.setDate(currentDate);
                         ((MealAdapter) mealAdapter).addMeal(mealToAdd);
+                        foodMenuItemDao.insert(mealToAdd);
                         updateTotalValues();
                     }
                 })
@@ -179,7 +189,8 @@ MealAdapter mealAdapter;
                 (meal.kcal * quantity) / 100,
                 (meal.fats * quantity) / 100,
                 (meal.carbs * quantity) / 100,
-                (meal.proteins * quantity) / 100);
+                (meal.proteins * quantity) / 100,
+                meal.date);
         return newMeal;
     }
     private void updateTotalValues() {
