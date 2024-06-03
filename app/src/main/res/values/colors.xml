@@ -5,4 +5,8 @@
     <color name="gray">#FF7A7E88</color>
     <color name="MyFitnessDefault">#FF33353E</color>
     <color name="RecipeCard">#FF42444E</color>
+    <color name="Primary">#37474F</color>
+    <color name="Secondary">#607D8B</color>
+    <color name="Accent">#FFC107</color>
+    <color name="Background">#ECEFF1</color>
 </resources>
