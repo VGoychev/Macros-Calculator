@@ -114,6 +114,7 @@ MealAdapter mealAdapter;
             mealAdapter.addMeal(meal);
         }
         updateTotalValues();
+        mealAdapter.notifyDataSetChanged();
     }
 
     public void findViews(){
