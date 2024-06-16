@@ -13,12 +13,12 @@ import com.example.macroscalculator.R;
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>{
-    private List<FoodMenuItem> meals;
+    private List<FoodItem> meals;
 
-    public MealAdapter(List<FoodMenuItem> meals) {
+    public MealAdapter(List<FoodItem> meals) {
         this.meals = meals;
     }
-    public FoodMenuItem getMealAt(int position) {
+    public FoodItem getMealAt(int position) {
         return meals.get(position);
     }
 
@@ -36,7 +36,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MealAdapter.MealViewHolder holder, int position) {
-        FoodMenuItem meal = meals.get(position);
+        FoodItem meal = meals.get(position);
         String mealNameWithGrams = meal.getMealName() + " (" + meal.getQuantity() + "g)";
         holder.mealName.setText(mealNameWithGrams);
         holder.kcalTextView.setText(String.format("%.0f kcal", meal.getKcal()));
@@ -54,11 +54,11 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     public int getItemCount() {
         return meals.size();
     }
-    public void addMeal(FoodMenuItem meal) {
+    public void addMeal(FoodItem meal) {
         meals.add(meal);
         notifyItemInserted(meals.size() - 1);
     }
-    public List<FoodMenuItem> getMeals() {
+    public List<FoodItem> getMeals() {
         return meals;
     }
     public static class MealViewHolder extends RecyclerView.ViewHolder {

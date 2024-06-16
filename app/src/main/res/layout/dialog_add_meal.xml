@@ -28,10 +28,20 @@
                 android:id="@+id/imgAddNewItem"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_toRightOf="@id/txtViewMenu"
+                android:layout_toLeftOf="@id/txtViewMenu"
                 android:src="@drawable/dish"
                 android:textColor="@color/black"
                 android:onClick="imgAddClick"/>
+            <ImageView
+                android:id="@+id/imgDeleteItem"
+                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@id/txtViewMenu"
+                android:src="@drawable/delete"
+                android:textColor="@color/black"
+                android:onClick="imgDeleteClick"/>
+
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <androidx.cardview.widget.CardView
@@ -53,11 +63,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="2dp">
         <RadioButton
             android:id="@+id/radio100g"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:text="100g"
             android:checked="true"
             android:textColor="@color/white" />
@@ -65,12 +76,14 @@
             android:id="@+id/radio200g"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:text="200g"
             android:textColor="@color/white"/>
         <RadioButton
             android:id="@+id/radio300g"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:text="300g"
             android:textColor="@color/white"/>
     </RadioGroup>

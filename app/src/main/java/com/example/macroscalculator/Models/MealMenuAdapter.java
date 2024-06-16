@@ -16,11 +16,26 @@ import com.example.macroscalculator.R;
 import java.util.List;
 
 public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealViewHolder>{
-    private List<FoodMenuItem> meals;
+    private List<FoodMenuItem> menuMeals;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public MealMenuAdapter(List<FoodMenuItem> meals) {
-        this.meals = meals;
+    public MealMenuAdapter(List<FoodMenuItem> menuMeals) {
+        this.menuMeals = menuMeals;
+    }
+    public void addMeal(FoodMenuItem meal) {
+        menuMeals.add(meal);
+        notifyDataSetChanged();
+    }
+    public void removeMeal(FoodMenuItem meal) {
+        menuMeals.remove(meal);
+        notifyDataSetChanged();
+    }
+    public List<FoodMenuItem> getMeals() {
+        return menuMeals;
+    }
+    public void setMeals(List<FoodMenuItem> menuMeals) {
+        this.menuMeals = menuMeals;
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
@@ -32,7 +47,7 @@ public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealVi
 
     @Override
     public void onBindViewHolder(@NonNull MealMenuAdapter.MealViewHolder holder, int position) {
-        FoodMenuItem meal = meals.get(position);
+        FoodMenuItem meal = menuMeals.get(position);
         holder.bind(meal, position == selectedPosition);
         holder.itemView.setOnClickListener(v -> {
             notifyItemChanged(selectedPosition);
@@ -43,11 +58,11 @@ public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealVi
 
     @Override
     public int getItemCount() {
-        return meals.size();
+        return menuMeals.size();
     }
     public FoodMenuItem getSelectedMeal() {
         if (selectedPosition != RecyclerView.NO_POSITION) {
-            return meals.get(selectedPosition);
+            return menuMeals.get(selectedPosition);
         }
         return null;
     }

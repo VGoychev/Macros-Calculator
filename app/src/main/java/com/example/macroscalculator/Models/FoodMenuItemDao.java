@@ -12,6 +12,10 @@ import java.util.List;
 public interface FoodMenuItemDao {
 @Insert
     void insert(FoodMenuItem foodMenuItem);
+@Query("SELECT * FROM FoodMenuItem")
+    List<FoodMenuItem> getAllMeals();
+@Query("SELECT * FROM FoodMenuItem")
+    FoodMenuItem getMeal();
 @Delete
     void delete(FoodMenuItem foodMenuItem);
 @Query("SELECT * FROM FoodMenuItem WHERE date = :date")

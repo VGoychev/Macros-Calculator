@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.macroscalculator.Models.DefaultMeals;
+import com.example.macroscalculator.Models.FoodItem;
+import com.example.macroscalculator.Models.FoodItemDao;
 import com.example.macroscalculator.Models.FoodMenuItem;
 import com.example.macroscalculator.Models.FoodMenuItemDao;
 import com.example.macroscalculator.Models.MealAdapter;
@@ -41,8 +43,10 @@ String date;
 SharedPreferences sp;
 AppDatabase db;
 FoodMenuItemDao foodMenuItemDao;
+FoodItemDao foodItemDao;
 RecyclerView recyclerViewTodayMeals;
 MealAdapter mealAdapter;
+MealMenuAdapter menuAdapter;
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
     final double MALE_HEIGHT_MULT = 4.799;
@@ -75,6 +79,7 @@ MealAdapter mealAdapter;
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "DB_NAME").allowMainThreadQueries().build();
         foodMenuItemDao = db.foodMenuItemDao();
+        foodItemDao = db.foodItemDao();
 
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -109,8 +114,8 @@ MealAdapter mealAdapter;
         recyclerViewTodayMeals.setAdapter(mealAdapter);
 
         String currentDate = dateFormat.format(calendar.getTime());
-        List<FoodMenuItem> savedMeals = foodMenuItemDao.getMealsByDate(currentDate);
-        for (FoodMenuItem meal : savedMeals) {
+        List<FoodItem> savedMeals = foodItemDao.getMealsByDate(currentDate);
+        for (FoodItem meal : savedMeals) {
             mealAdapter.addMeal(meal);
         }
         updateTotalValues();
@@ -144,9 +149,9 @@ MealAdapter mealAdapter;
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            FoodMenuItem meal = mealAdapter.getMealAt(position);
+            FoodItem meal = mealAdapter.getMealAt(position);
             mealAdapter.removeMeal(position);
-            foodMenuItemDao.delete(meal);
+            foodItemDao.delete(meal);
             updateTotalValues();
         }
     }
@@ -161,8 +166,9 @@ MealAdapter mealAdapter;
         RadioGroup radioGroupQuantities = dialogView.findViewById(R.id.radioGroupQuantities);
         RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
         recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
+
         List<FoodMenuItem> defaultMeals = DefaultMeals.getDefaultMeals(dateFormat.format(calendar.getTime()));
-        MealMenuAdapter menuAdapter = new MealMenuAdapter(defaultMeals);
+        menuAdapter = new MealMenuAdapter(defaultMeals);
         recyclerViewMeals.setAdapter(menuAdapter);
 
 
@@ -172,10 +178,10 @@ MealAdapter mealAdapter;
                     FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
                     if (selectedMeal != null) {
                         String currentDate = dateFormat.format(calendar.getTime());
-                        FoodMenuItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
+                        FoodItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
                         mealToAdd.setDate(currentDate);
-                        ((MealAdapter) mealAdapter).addMeal(mealToAdd);
-                        foodMenuItemDao.insert(mealToAdd);
+                        mealAdapter.addMeal(mealToAdd);
+                        foodItemDao.insert(mealToAdd);
                         updateTotalValues();
                     }
                 })
@@ -206,8 +212,8 @@ MealAdapter mealAdapter;
         mealAdapter.setSelectedGrams(100);
         return 100;
     }
-    private FoodMenuItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
-        FoodMenuItem newMeal = new FoodMenuItem(meal.getMealName(),
+    private FoodItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
+        FoodItem newMeal = new FoodItem(meal.getMealName(),
                 (meal.getKcal() * quantity) / 100,
                 (meal.getFats() * quantity) / 100,
                 (meal.getCarbs() * quantity) / 100,
@@ -217,13 +223,13 @@ MealAdapter mealAdapter;
         return newMeal;
     }
     private void updateTotalValues() {
-        List<FoodMenuItem> meals = mealAdapter.getMeals(); // Get the list of meals from the adapter
+        List<FoodItem> meals = mealAdapter.getMeals(); // Get the list of meals from the adapter
         int totalKcal = 0;
         double totalFats = 0;
         double totalCarbs = 0;
         double totalProteins = 0;
 
-        for (FoodMenuItem meal : meals) {
+        for (FoodItem meal : meals) {
             totalKcal += meal.getKcal();
             totalFats += meal.getFats();
             totalCarbs += meal.getCarbs();

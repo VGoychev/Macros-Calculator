@@ -17,7 +17,7 @@
                 android:id="@+id/textViewGenderValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
+                android:paddingTop="2dp"
                 android:text="Male"
                 android:textStyle="bold"
                 android:textColor="@color/white" />
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewGenderValue"
-                android:padding="2dp"
+                android:paddingTop="2dp"
                 android:text="165 cm"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
@@ -37,7 +37,7 @@
                 android:layout_below="@id/textViewAgeValue"
                 android:layout_toRightOf="@id/textViewHeightValue"
                 android:layout_marginLeft="4dp"
-                android:padding="2dp"
+                android:paddingTop="2dp"
                 android:text="64 kg"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
@@ -48,32 +48,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@id/textViewGenderValue"
-                android:padding="2dp"
+                android:paddingTop="2dp"
                 android:text="22 years"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+
             <Button
                 android:id="@+id/button_macros_add"
-                android:layout_width="wrap_content"
+                android:layout_width="78dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/custom_button_circle"
-                android:text="+"
-                android:scaleY="1.5"
+                android:onClick="btnAddClick"
                 android:scaleX="1.2"
+                android:scaleY="1.5"
+                android:text="+"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:onClick="btnAddClick"/>
+                android:textSize="26sp"
+                android:textStyle="bold" />
             <ImageView
                 android:id="@+id/imgViewEdit"
-                android:layout_width="40dp"
+                android:layout_width="38dp"
                 android:layout_height="44dp"
                 android:src="@drawable/edit"
-                android:padding="4dp"
+                android:padding="2dp"
                 android:layout_toLeftOf="@id/button_macros_add"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="6dp"
                 android:onClick="imageEditClick"/>
             <TextView
                 android:id="@+id/text_date_display"
@@ -161,7 +162,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTodayMeals"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="300dp"
             android:textSize="14dp"
             android:textColor="@color/white"
             android:fontFamily="sans-serif-condensed-medium" />
