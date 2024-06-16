@@ -1,5 +1,6 @@
 package com.example.macroscalculator.Models;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,30 +12,50 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.macroscalculator.MacrosCalculator;
 import com.example.macroscalculator.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealViewHolder>{
     private List<FoodMenuItem> menuMeals;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public MealMenuAdapter(List<FoodMenuItem> menuMeals) {
-        this.menuMeals = menuMeals;
+    public MealMenuAdapter(List<FoodMenuItem> meals) {
+        this.menuMeals = meals;
+    }
+    public int getSelectedPosition(){
+        return selectedPosition;
     }
     public void addMeal(FoodMenuItem meal) {
         menuMeals.add(meal);
         notifyDataSetChanged();
     }
-    public void removeMeal(FoodMenuItem meal) {
-        menuMeals.remove(meal);
-        notifyDataSetChanged();
+    public void removeMeal(int position, Context context) {
+        if (position >= 0 && position < menuMeals.size()) {
+            FoodMenuItem mealToDelete = menuMeals.get(position);
+            menuMeals.remove(position);
+            if (selectedPosition == position) {
+                selectedPosition = RecyclerView.NO_POSITION; // Reset selected position
+            } else if (selectedPosition > position) {
+                selectedPosition--; // Adjust selected position after removal
+                 // Update view for new selected position
+            }
+
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, menuMeals.size());
+
+            DefaultMeals.setCurrentMeals(new ArrayList<>(menuMeals));
+            DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(context), context.getApplicationContext());
+            MacrosCalculator.db.foodMenuItemDao().delete(mealToDelete);
+        }
     }
     public List<FoodMenuItem> getMeals() {
         return menuMeals;
     }
-    public void setMeals(List<FoodMenuItem> menuMeals) {
-        this.menuMeals = menuMeals;
+    public void setMeals(List<FoodMenuItem> meals) {
+        this.menuMeals = meals;
         notifyDataSetChanged();
     }
     @NonNull

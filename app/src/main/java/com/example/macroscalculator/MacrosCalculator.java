@@ -1,5 +1,7 @@
 package com.example.macroscalculator;
 
+import static com.example.macroscalculator.Models.DefaultMeals.loadMealsFromDatabase;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,19 +37,21 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MacrosCalculator extends AppCompatActivity {
-Button btnAdd;
+    public static AppDatabase db;
+    Button btnAdd;
 ImageView imageEdit;
 TextView txtViewGender, txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
 Calendar calendar;
 SimpleDateFormat dateFormat;
 String date;
 SharedPreferences sp;
-AppDatabase db;
+//AppDatabase db;
 FoodMenuItemDao foodMenuItemDao;
 FoodItemDao foodItemDao;
 RecyclerView recyclerViewTodayMeals;
 MealAdapter mealAdapter;
 MealMenuAdapter menuAdapter;
+
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
     final double MALE_HEIGHT_MULT = 4.799;
@@ -80,6 +85,8 @@ MealMenuAdapter menuAdapter;
                 AppDatabase.class, "DB_NAME").allowMainThreadQueries().build();
         foodMenuItemDao = db.foodMenuItemDao();
         foodItemDao = db.foodItemDao();
+
+        DefaultMeals.init(this);
 
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -156,6 +163,7 @@ MealMenuAdapter menuAdapter;
         }
     }
     private void showAddMealDialog() {
+        Log.d("Dialog", "Showing add meal dialog...");
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
@@ -163,15 +171,30 @@ MealMenuAdapter menuAdapter;
 
 
         final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
+        final ImageView imgDelete = dialogView.findViewById(R.id.imgDeleteItem);
         RadioGroup radioGroupQuantities = dialogView.findViewById(R.id.radioGroupQuantities);
         RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
         recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
 
-        List<FoodMenuItem> defaultMeals = DefaultMeals.getDefaultMeals(dateFormat.format(calendar.getTime()));
-        menuAdapter = new MealMenuAdapter(defaultMeals);
+//        List<FoodMenuItem> currentMeals = DefaultMeals.getCurrentMeals();
+        List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
+
+        Log.d("Dialog", "Loaded " + loadedMeals.size() + " meals from database.");
+
+        menuAdapter = new MealMenuAdapter(loadedMeals);
         recyclerViewMeals.setAdapter(menuAdapter);
 
 
+        imgDelete.setOnClickListener(v -> {
+            int position = menuAdapter.getSelectedPosition(); // Replace with your logic to get selected position
+            if (position != RecyclerView.NO_POSITION) {
+                menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
+//                db.foodMenuItemDao().delete();
+//                DefaultMeals.setCurrentMeals(menuAdapter.getMeals());
+//                DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(MacrosCalculator.this), MacrosCalculator.this);
+
+            }
+        });
 
         builder.setPositiveButton("Add", (dialog, which) -> {
                     int selectedQuantity = getSelectedQuantity(radioGroupQuantities);
@@ -221,6 +244,9 @@ MealMenuAdapter menuAdapter;
                 meal.getDate());
         newMeal.setQuantity(quantity);
         return newMeal;
+    }
+    private List<FoodMenuItem> loadMealsFromDatabase() {
+        return DefaultMeals.loadMealsFromDatabase(this);
     }
     private void updateTotalValues() {
         List<FoodItem> meals = mealAdapter.getMeals(); // Get the list of meals from the adapter

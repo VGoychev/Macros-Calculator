@@ -1,5 +1,6 @@
 package com.example.macroscalculator.Models;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,21 +8,26 @@ import androidx.room.PrimaryKey;
 public class FoodMenuItem {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    @ColumnInfo(name = "meal_name")
     public String mealName;
+    @ColumnInfo(name = "meal_kcal")
     public double kcal;
+    @ColumnInfo(name = "meal_fats")
     public double fats;
+    @ColumnInfo(name = "meal_proteins")
     public double proteins;
+    @ColumnInfo(name = "meal_carbs")
     public double carbs;
-    public String date;
+    @ColumnInfo(name = "meal_quantity")
     public int quantity;
-
-    public FoodMenuItem(String mealName, double kcal, double fats, double carbs, double proteins, String date) {
+    @ColumnInfo(name = "meal_date")
+    public String date;
+    public FoodMenuItem(String mealName, double kcal, double fats, double carbs, double proteins) {
         this.mealName = mealName;
         this.kcal = kcal;
         this.fats = fats;
         this.carbs = carbs;
         this.proteins = proteins;
-        this.date = date;
         this.quantity = 100;
     }
     public String getMealName(){
@@ -42,11 +48,11 @@ public class FoodMenuItem {
     public int getId(){
         return id;
     }
-    public String getDate() {
-        return date;
-    }
     public int getQuantity(){
         return quantity;
+    }
+    public String getDate(){
+        return date;
     }
     public void setId(int id) {
         this.id = id;
@@ -72,9 +78,6 @@ public class FoodMenuItem {
         this.carbs = carbs;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }

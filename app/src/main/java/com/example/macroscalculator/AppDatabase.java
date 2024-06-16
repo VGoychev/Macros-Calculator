@@ -11,6 +11,8 @@ import com.example.macroscalculator.Models.FoodItemDao;
 import com.example.macroscalculator.Models.FoodMenuItem;
 import com.example.macroscalculator.Models.FoodMenuItemDao;
 
+import java.util.List;
+
 @Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FoodItemDao foodItemDao();
