@@ -176,7 +176,6 @@ MealMenuAdapter menuAdapter;
         RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
         recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
 
-//        List<FoodMenuItem> currentMeals = DefaultMeals.getCurrentMeals();
         List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
 
         Log.d("Dialog", "Loaded " + loadedMeals.size() + " meals from database.");
@@ -184,15 +183,16 @@ MealMenuAdapter menuAdapter;
         menuAdapter = new MealMenuAdapter(loadedMeals);
         recyclerViewMeals.setAdapter(menuAdapter);
 
+        imgAdd.setOnClickListener(v ->{
+            Intent intent = new Intent(MacrosCalculator.this, AddNewMealToMenu.class);
+            startActivity(intent);
+        });
+
 
         imgDelete.setOnClickListener(v -> {
             int position = menuAdapter.getSelectedPosition(); // Replace with your logic to get selected position
             if (position != RecyclerView.NO_POSITION) {
                 menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
-//                db.foodMenuItemDao().delete();
-//                DefaultMeals.setCurrentMeals(menuAdapter.getMeals());
-//                DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(MacrosCalculator.this), MacrosCalculator.this);
-
             }
         });
 

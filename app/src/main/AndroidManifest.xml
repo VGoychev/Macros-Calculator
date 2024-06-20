@@ -13,9 +13,12 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".AddNewMealToMenu"
+            android:exported="false" />
+        <activity
             android:name=".MacrosCalculator"
             android:exported="false"
-            android:theme="@style/Theme.MacrosCalculator"/>
+            android:theme="@style/Theme.MacrosCalculator" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

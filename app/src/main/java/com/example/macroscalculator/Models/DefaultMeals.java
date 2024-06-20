@@ -59,26 +59,6 @@ public class DefaultMeals {
         return db.foodMenuItemDao().getAllMeals();
     }
     public static void updateDatabase(List<FoodMenuItem> meals, Context context) {
-//        AppDatabase db = AppDatabase.getInstance(context.getApplicationContext());
-//        db.foodMenuItemDao().deleteAll(meals);// Clear existing data
-//        db.foodMenuItemDao().insertAll(meals);
         MacrosCalculator.db.foodMenuItemDao().updateDefaultMeals(meals);
     }
-//    public static List<FoodMenuItem> loadMealsFromDatabase(Context context) {
-//        Log.d("DatabaseLoad", "Loading meals from database...");
-//        List<FoodMenuItem> meals = new ArrayList<>();
-//        try {
-//            AppDatabase db = AppDatabase.getInstance(context);
-//            meals = db.foodMenuItemDao().getAllMeals();
-//            Log.d("DatabaseLoad", "Loaded " + meals.size() + " meals from database.");
-//        } catch (Exception e) {
-//            Log.e("DatabaseLoad", "Error loading meals from database: " + e.getMessage());
-//        }
-//        return meals;
-//    }
-//    public static void updateDatabase(List<FoodMenuItem> meals, Context context) {
-//        // Update the database with the new list of default meals
-//        AppDatabase db = AppDatabase.getInstance(context.getApplicationContext()); // Replace with your actual database instance
-//        db.foodMenuItemDao().updateDefaultMeals(meals); // Implement updateDefaultMeals() in your DAO
-//    }
 }
