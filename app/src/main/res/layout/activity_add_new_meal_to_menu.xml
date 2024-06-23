@@ -29,6 +29,13 @@
                 android:textColor="@color/white" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="12dp"
+        android:layout_margin="6dp"
+        android:background= "@color/gray"
+        android:src="@drawable/eating"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

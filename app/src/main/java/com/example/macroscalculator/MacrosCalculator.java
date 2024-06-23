@@ -3,6 +3,7 @@ package com.example.macroscalculator;
 import static com.example.macroscalculator.Models.DefaultMeals.loadMealsFromDatabase;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -39,18 +40,18 @@ import java.util.List;
 public class MacrosCalculator extends AppCompatActivity {
     public static AppDatabase db;
     Button btnAdd;
-ImageView imageEdit;
-TextView txtViewGender, txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
-Calendar calendar;
-SimpleDateFormat dateFormat;
-String date;
-SharedPreferences sp;
-//AppDatabase db;
-FoodMenuItemDao foodMenuItemDao;
-FoodItemDao foodItemDao;
-RecyclerView recyclerViewTodayMeals;
-MealAdapter mealAdapter;
-MealMenuAdapter menuAdapter;
+    ImageView imageEdit;
+    TextView txtViewGender, txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
+    Calendar calendar;
+    SimpleDateFormat dateFormat;
+    String date;
+    SharedPreferences sp;
+    FoodMenuItemDao foodMenuItemDao;
+    FoodItemDao foodItemDao;
+    RecyclerView recyclerViewTodayMeals;
+    MealAdapter mealAdapter;
+    MealMenuAdapter menuAdapter;
+    private static final int ADD_MEAL_REQUEST_CODE = 1;
 
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
@@ -129,22 +130,28 @@ MealMenuAdapter menuAdapter;
         mealAdapter.notifyDataSetChanged();
     }
 
-    public void findViews(){
-        imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
-        btnAdd = (Button) findViewById(R.id.button_macros_add);
-        txtViewGender = (TextView) findViewById(R.id.textViewGenderValue);
-        txtViewAge = (TextView) findViewById(R.id.textViewAgeValue);
-        txtViewHeight = (TextView) findViewById(R.id.textViewHeightValue);
-        txtViewWeight = (TextView) findViewById(R.id.textViewWeightValue);
-        txtViewMaintenance = (TextView) findViewById(R.id.maintenanceCaloriesTextView);
-        txtViewGain = (TextView) findViewById(R.id.weightGainCaloriesTextView);
-        txtViewLose = (TextView) findViewById(R.id.weightLossCaloriesTextView);
-        txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
-        dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
-        recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
-        itemTouchHelper.attachToRecyclerView(recyclerViewTodayMeals);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_MEAL_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            String name = data.getStringExtra("name");
+            double fats = data.getDoubleExtra("fats", 0);
+            double carbs = data.getDoubleExtra("carbs", 0);
+            double proteins = data.getDoubleExtra("proteins", 0);
+            double kcal = data.getDoubleExtra("kcal", 0);
+
+            FoodMenuItem newMeal = new FoodMenuItem(name, kcal, fats, carbs, proteins);
+
+            // Save to database
+            foodMenuItemDao.insert(newMeal);
+            DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(this), getApplicationContext());
+
+            // Update RecyclerView
+            menuAdapter.addMeal(newMeal);
+        }
     }
+
+
     private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         SwipeToDeleteCallback() {
             super(0, ItemTouchHelper.LEFT);
@@ -185,7 +192,7 @@ MealMenuAdapter menuAdapter;
 
         imgAdd.setOnClickListener(v ->{
             Intent intent = new Intent(MacrosCalculator.this, AddNewMealToMenu.class);
-            startActivity(intent);
+            startActivityForResult(intent, ADD_MEAL_REQUEST_CODE);
         });
 
 
@@ -267,5 +274,22 @@ MealMenuAdapter menuAdapter;
                 totalFats + "g fats " +
                 totalCarbs + "g carbs " +
                 totalProteins +"g proteins");
+    }
+
+    public void findViews(){
+        imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
+        btnAdd = (Button) findViewById(R.id.button_macros_add);
+        txtViewGender = (TextView) findViewById(R.id.textViewGenderValue);
+        txtViewAge = (TextView) findViewById(R.id.textViewAgeValue);
+        txtViewHeight = (TextView) findViewById(R.id.textViewHeightValue);
+        txtViewWeight = (TextView) findViewById(R.id.textViewWeightValue);
+        txtViewMaintenance = (TextView) findViewById(R.id.maintenanceCaloriesTextView);
+        txtViewGain = (TextView) findViewById(R.id.weightGainCaloriesTextView);
+        txtViewLose = (TextView) findViewById(R.id.weightLossCaloriesTextView);
+        txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
+        dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
+        recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
+        itemTouchHelper.attachToRecyclerView(recyclerViewTodayMeals);
     }
 }

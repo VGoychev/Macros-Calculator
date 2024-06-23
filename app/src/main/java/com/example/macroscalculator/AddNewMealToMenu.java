@@ -1,5 +1,7 @@
 package com.example.macroscalculator;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,9 +18,24 @@ Button buttonAdd, buttonCancel;
 EditText editName, editFats, editCarbs, editProteins;
 
     public void btnAddClick(View view) {
+        String name = editName.getText().toString();
+        double fats = Double.parseDouble(editFats.getText().toString());
+        double carbs = Double.parseDouble(editCarbs.getText().toString());
+        double proteins = Double.parseDouble(editProteins.getText().toString());
+        double kcal = (fats * 9) + (carbs * 4) + (proteins * 4);  // Calculate kcal based on macronutrients
 
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("name", name);
+        resultIntent.putExtra("fats", fats);
+        resultIntent.putExtra("carbs", carbs);
+        resultIntent.putExtra("proteins", proteins);
+        resultIntent.putExtra("kcal", kcal);
+
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
     public void btnCancelClick(View view){
+        setResult(Activity.RESULT_CANCELED);
         finish();
     }
     @Override
