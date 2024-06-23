@@ -25,6 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    @Override
+    public void onBackPressed() {
+        // Do nothing, so the back button is disabled.
+    }
 
     EditText enterHeight, enterWeight, enterAge;
     private double height;

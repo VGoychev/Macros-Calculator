@@ -49,6 +49,8 @@ public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealVi
             DefaultMeals.setCurrentMeals(new ArrayList<>(menuMeals));
             DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(context), context.getApplicationContext());
             MacrosCalculator.db.foodMenuItemDao().delete(mealToDelete);
+            notifyItemRemoved(position);
+            notifyDataSetChanged();
         }
     }
     public List<FoodMenuItem> getMeals() {

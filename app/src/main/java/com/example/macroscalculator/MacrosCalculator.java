@@ -20,9 +20,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.macroscalculator.Models.DefaultMeals;
 import com.example.macroscalculator.Models.FoodItem;
@@ -38,6 +40,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MacrosCalculator extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing, so the back button is disabled.
+    }
     public static AppDatabase db;
     Button btnAdd;
     ImageView imageEdit;
@@ -127,8 +134,8 @@ public class MacrosCalculator extends AppCompatActivity {
             mealAdapter.addMeal(meal);
         }
         updateTotalValues();
-        mealAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -163,12 +170,21 @@ public class MacrosCalculator extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            FoodItem meal = mealAdapter.getMealAt(position);
-            mealAdapter.removeMeal(position);
-            foodItemDao.delete(meal);
+//            FoodItem meal = mealAdapter.getMealAt(position);
+            FoodItem deletedMeal = mealAdapter.getMeals().get(position);
+            deleteItem(deletedMeal);
             updateTotalValues();
+//            mealAdapter.notifyDataSetChanged();
+
         }
     }
+
+    private void deleteItem(FoodItem foodItem) {
+        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
+        database.foodItemDao().delete(foodItem);
+        mealAdapter.removeMeal(foodItem);
+    }
+
     private void showAddMealDialog() {
         Log.d("Dialog", "Showing add meal dialog...");
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
@@ -203,16 +219,19 @@ public class MacrosCalculator extends AppCompatActivity {
             }
         });
 
+
         builder.setPositiveButton("Add", (dialog, which) -> {
                     int selectedQuantity = getSelectedQuantity(radioGroupQuantities);
                     FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
-                    if (selectedMeal != null) {
+                    if (selectedMeal != null && selectedQuantity > 0) {
                         String currentDate = dateFormat.format(calendar.getTime());
                         FoodItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
                         mealToAdd.setDate(currentDate);
                         mealAdapter.addMeal(mealToAdd);
                         foodItemDao.insert(mealToAdd);
                         updateTotalValues();
+                    } else {
+                        Toast.makeText(this, "Please select a meal and enter a valid quantity.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -238,10 +257,12 @@ public class MacrosCalculator extends AppCompatActivity {
         } else if (selectedId == R.id.radio300g) {
             mealAdapter.setSelectedGrams(300);
             return 300;
+        } else {
+            mealAdapter.setSelectedGrams(100);
+            return 100;
         }
-        mealAdapter.setSelectedGrams(100);
-        return 100;
     }
+
     private FoodItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
         FoodItem newMeal = new FoodItem(meal.getMealName(),
                 (meal.getKcal() * quantity) / 100,
@@ -252,9 +273,13 @@ public class MacrosCalculator extends AppCompatActivity {
         newMeal.setQuantity(quantity);
         return newMeal;
     }
+
+
     private List<FoodMenuItem> loadMealsFromDatabase() {
         return DefaultMeals.loadMealsFromDatabase(this);
     }
+
+
     private void updateTotalValues() {
         List<FoodItem> meals = mealAdapter.getMeals(); // Get the list of meals from the adapter
         int totalKcal = 0;

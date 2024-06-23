@@ -22,9 +22,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         return meals.get(position);
     }
 
-    public void removeMeal(int position) {
-        meals.remove(position);
-        notifyItemRemoved(position);
+    public void removeMeal(FoodItem foodItem) {
+        int position = meals.indexOf(foodItem);
+        if (position != -1) {
+            meals.remove(position);
+            notifyItemRemoved(position);
+        }
     }
     @NonNull
     @Override
