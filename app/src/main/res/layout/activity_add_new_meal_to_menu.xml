@@ -8,6 +8,7 @@
     tools:context=".AddNewMealToMenu"
     android:orientation="vertical"
     android:padding="16dp"
+
     android:background="@color/RecipeCard">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -168,4 +169,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <com.google.android.ads.nativetemplates.TemplateView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:gnt_template_type="@layout/gnt_small_template_view"
+            android:id="@+id/nativeAdTemplate"/>
+    <com.google.android.gms.ads.nativead.MediaView
+        android:id="@+id/ad_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nativeAdTemplate" />
+</RelativeLayout>
 </LinearLayout>

@@ -1,17 +1,38 @@
 package com.example.macroscalculator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.nativead.MediaView;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.google.android.gms.ads.nativead.NativeAdView;
 
 public class AddNewMealToMenu extends AppCompatActivity {
 Button buttonAdd, buttonCancel;
@@ -48,8 +69,24 @@ EditText editName, editFats, editCarbs, editProteins;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        MobileAds.initialize(this);
+        AdLoader adLoader = new AdLoader.Builder(this, "ca-app-pub-4087996753169079/7132802137")
+                .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+                    @Override
+                    public void onNativeAdLoaded(@NonNull NativeAd nativeAd) {
+                        NativeTemplateStyle style = new NativeTemplateStyle.Builder().build();
+                        TemplateView templateView = findViewById(R.id.nativeAdTemplate);
+                        templateView.setStyles(style);
+                        templateView.setNativeAd(nativeAd);
+
+                    }
+                }).build();
         findViews();
+        adLoader.loadAd(new AdRequest.Builder().build());
     }
+
     public void findViews(){
         buttonAdd = findViewById(R.id.button_add);
         buttonCancel = findViewById(R.id.button_cancel);
@@ -58,4 +95,5 @@ EditText editName, editFats, editCarbs, editProteins;
         editCarbs = findViewById(R.id.editText_add_meal_carbs);
         editProteins = findViewById(R.id.editText_add_meal_proteins);
     }
+
 }

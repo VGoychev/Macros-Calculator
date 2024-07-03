@@ -33,6 +33,10 @@ import com.example.macroscalculator.Models.FoodMenuItem;
 import com.example.macroscalculator.Models.FoodMenuItemDao;
 import com.example.macroscalculator.Models.MealAdapter;
 import com.example.macroscalculator.Models.MealMenuAdapter;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +47,7 @@ public class MacrosCalculator extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Do nothing, so the back button is disabled.
+    finishAffinity();
     }
     public static AppDatabase db;
     Button btnAdd;
@@ -59,6 +63,8 @@ public class MacrosCalculator extends AppCompatActivity {
     MealAdapter mealAdapter;
     MealMenuAdapter menuAdapter;
     private static final int ADD_MEAL_REQUEST_CODE = 1;
+
+    private AdView mAdView;
 
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
@@ -86,8 +92,23 @@ public class MacrosCalculator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_macros_calculator);
+
+
+                    // Initialize the Google Mobile Ads SDK on a background thread.
+        MobileAds.initialize(this, initializationStatus -> {});
+
+        mAdView = findViewById(R.id.adView);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        mAdView.loadAd(adRequest);
+
+
+
         sp = getApplicationContext().getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
         findViews();
+
+
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "DB_NAME").allowMainThreadQueries().build();
@@ -128,14 +149,42 @@ public class MacrosCalculator extends AppCompatActivity {
         mealAdapter = new MealAdapter(new ArrayList<>());
         recyclerViewTodayMeals.setAdapter(mealAdapter);
 
-        String currentDate = dateFormat.format(calendar.getTime());
-        List<FoodItem> savedMeals = foodItemDao.getMealsByDate(currentDate);
+        List<FoodItem> savedMeals = loadTodaysMealsFromDatabase();
         for (FoodItem meal : savedMeals) {
             mealAdapter.addMeal(meal);
         }
         updateTotalValues();
     }
+    private List<FoodItem> loadTodaysMealsFromDatabase() {
+        String currentDate = dateFormat.format(calendar.getTime());
+        List<FoodItem> meals = foodItemDao.getMealsByDate(currentDate);
+        Log.d("Database", "Loaded meals: " + meals.size());
+        return meals;
+    }
 
+    @Override
+    protected void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -170,11 +219,10 @@ public class MacrosCalculator extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-//            FoodItem meal = mealAdapter.getMealAt(position);
             FoodItem deletedMeal = mealAdapter.getMeals().get(position);
             deleteItem(deletedMeal);
             updateTotalValues();
-//            mealAdapter.notifyDataSetChanged();
+
 
         }
     }
@@ -182,7 +230,10 @@ public class MacrosCalculator extends AppCompatActivity {
     private void deleteItem(FoodItem foodItem) {
         AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
         database.foodItemDao().delete(foodItem);
+        Log.d("Database", "Deleted meal: " + foodItem.getMealName());
         mealAdapter.removeMeal(foodItem);
+        mealAdapter.notifyDataSetChanged();
+        updateTotalValues();
     }
 
     private void showAddMealDialog() {
@@ -227,9 +278,12 @@ public class MacrosCalculator extends AppCompatActivity {
                         String currentDate = dateFormat.format(calendar.getTime());
                         FoodItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
                         mealToAdd.setDate(currentDate);
-                        mealAdapter.addMeal(mealToAdd);
-                        foodItemDao.insert(mealToAdd);
-                        updateTotalValues();
+
+                                    foodItemDao.insert(mealToAdd);
+
+                                mealAdapter.addMeal(mealToAdd);
+                                updateTotalValues();
+
                     } else {
                         Toast.makeText(this, "Please select a meal and enter a valid quantity.", Toast.LENGTH_SHORT).show();
                     }
@@ -277,6 +331,7 @@ public class MacrosCalculator extends AppCompatActivity {
 
     private List<FoodMenuItem> loadMealsFromDatabase() {
         return DefaultMeals.loadMealsFromDatabase(this);
+
     }
 
 

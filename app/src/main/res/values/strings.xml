@@ -20,4 +20,5 @@
     <string name="weight">Weight(kg):</string>
     <string name="height">Height(cm):</string>
     <string name="edit">Edit Measurements</string>
+    <string name="ad_attribution">Ad</string>
 </resources>
