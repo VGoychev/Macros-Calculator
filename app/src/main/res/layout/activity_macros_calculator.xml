@@ -24,6 +24,7 @@
                 android:paddingTop="2dp"
                 android:text="Female"
                 android:textColor="@color/white"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/textViewAgeValue"
                 app:layout_constraintHorizontal_bias="0.21"
@@ -35,14 +36,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewGenderValue"
+                android:layout_marginStart="4dp"
                 android:paddingTop="2dp"
                 android:text="165 cm"
                 android:textColor="@color/white"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewGenderValue"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.833" />
 
             <TextView
                 android:id="@+id/textViewWeightValue"
@@ -53,12 +56,14 @@
                 android:paddingTop="2dp"
                 android:text="64 kg"
                 android:textColor="@color/white"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imgViewEdit"
-                app:layout_constraintHorizontal_bias="0.344"
+                app:layout_constraintHorizontal_bias="0.159"
                 app:layout_constraintStart_toEndOf="@+id/textViewHeightValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewAgeValue" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewAgeValue"
+                app:layout_constraintVertical_bias="0.833" />
 
             <TextView
                 android:id="@+id/textViewAgeValue"
@@ -69,6 +74,7 @@
                 android:paddingTop="2dp"
                 android:text="22 years"
                 android:textColor="@color/white"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/imgViewEdit"
                 app:layout_constraintStart_toEndOf="@+id/textViewGenderValue"
