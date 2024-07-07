@@ -61,33 +61,32 @@
         android:layout_below="@id/txtViewMenu"
         android:background="@color/RecipeCard"/>
     </androidx.cardview.widget.CardView>
-    <RadioGroup
-        android:id="@+id/radioGroupQuantities"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="2dp">
-        <RadioButton
-            android:id="@+id/radio100g"
+        android:layout_margin="4dp"
+        android:orientation="horizontal">
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/food_scale"/>
+        <EditText
+            android:id="@+id/editTextQuantity"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:hint="100"
+            android:inputType="number"
+            android:textColorHint="@color/gray"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="italic"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:text="100g"
-            android:checked="true"
-            android:textColor="@color/white" />
-        <RadioButton
-            android:id="@+id/radio200g"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:text="200g"
-            android:textColor="@color/white"/>
-        <RadioButton
-            android:id="@+id/radio300g"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:text="300g"
-            android:textColor="@color/white"/>
-    </RadioGroup>
+            android:text="g"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+    </LinearLayout>
 </LinearLayout>

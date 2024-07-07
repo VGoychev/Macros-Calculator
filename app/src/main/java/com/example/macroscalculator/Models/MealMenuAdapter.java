@@ -50,6 +50,7 @@ public class MealMenuAdapter extends RecyclerView.Adapter<MealMenuAdapter.MealVi
             DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(context), context.getApplicationContext());
             MacrosCalculator.db.foodMenuItemDao().delete(mealToDelete);
             notifyItemRemoved(position);
+            DefaultMeals.loadMealsFromDatabase(context);
             notifyDataSetChanged();
         }
     }

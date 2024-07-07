@@ -28,13 +28,6 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         notifyDataSetChanged();
     }
 
-    public void removeMeal(FoodItem foodItem) {
-        int position = meals.indexOf(foodItem);
-        if (position != -1) {
-            meals.remove(position);
-            notifyItemRemoved(position);
-        }
-    }
     @NonNull
     @Override
     public MealAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,12 +46,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         holder.carbsTextView.setText(String.format("%.0fg carbs", meal.getCarbs()));
         holder.proteinsTextView.setText(String.format("%.0fg proteins", meal.getProteins()));
     }
-    private int selectedGrams = 100; // Default to 100g
 
-    public void setSelectedGrams(int grams) {
-        selectedGrams = grams;
-        notifyDataSetChanged(); // Update the RecyclerView when grams selection changes
-    }
     @Override
     public int getItemCount() {
         return meals.size();

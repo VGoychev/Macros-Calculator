@@ -36,6 +36,14 @@ public class FoodItem {
         this.quantity = 100;
     }
 
+    public void calculateNutritionForQuantity(int grams) {
+        this.kcal = (this.kcal * grams) / 100;
+        this.fats = (this.fats * grams) / 100;
+        this.carbs = (this.carbs * grams) / 100;
+        this.proteins = (this.proteins * grams) / 100;
+        this.quantity = grams;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

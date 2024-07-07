@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,48 +11,74 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/RecipeCard">
-        <RelativeLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/textViewGenderValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
                 android:paddingTop="2dp"
                 android:text="Male"
+                android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textColor="@color/white" />
+                app:layout_constraintEnd_toStartOf="@+id/textViewAgeValue"
+                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/textViewHeightValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewGenderValue"
+                android:layout_marginStart="2dp"
                 android:paddingTop="2dp"
                 android:text="165 cm"
+                android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewGenderValue"
+                app:layout_constraintVertical_bias="1.0" />
+
             <TextView
                 android:id="@+id/textViewWeightValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewAgeValue"
+                android:layout_marginEnd="16dp"
                 android:layout_toRightOf="@id/textViewHeightValue"
-                android:layout_marginLeft="4dp"
                 android:paddingTop="2dp"
                 android:text="64 kg"
+                android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imgViewEdit"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textViewHeightValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewAgeValue"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/textViewAgeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
                 android:layout_toRightOf="@id/textViewGenderValue"
                 android:paddingTop="2dp"
                 android:text="22 years"
                 android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/imgViewEdit"
+                app:layout_constraintStart_toEndOf="@+id/textViewGenderValue"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_macros_add"
@@ -66,30 +93,43 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/imgViewEdit"
                 android:layout_width="38dp"
                 android:layout_height="44dp"
-                android:src="@drawable/edit"
-                android:padding="2dp"
+                android:layout_marginEnd="12dp"
                 android:layout_toLeftOf="@id/button_macros_add"
-                android:layout_marginRight="6dp"
-                android:onClick="imageEditClick"/>
+                android:onClick="imageEditClick"
+                android:padding="2dp"
+                android:src="@drawable/edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_macros_add"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/text_date_display"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/button_macros_add"
+                android:layout_width="143dp"
+                android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:textAlignment="center"
-                android:layout_marginTop="14dp"
+                android:layout_marginEnd="4dp"
+                android:layout_toRightOf="@id/button_macros_add"
                 android:text="dd.mm.yyyy"
-                android:textSize="18sp"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
-        </RelativeLayout>
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.521" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
         <LinearLayout
             android:layout_width="match_parent"

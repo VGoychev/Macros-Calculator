@@ -230,10 +230,10 @@ public class MacrosCalculator extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
         builder.setView(dialogView);
 
+        EditText editTextQuantity = dialogView.findViewById(R.id.editTextQuantity);
 
         final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
         final ImageView imgDelete = dialogView.findViewById(R.id.imgDeleteItem);
-        RadioGroup radioGroupQuantities = dialogView.findViewById(R.id.radioGroupQuantities);
         RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
         recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
 
@@ -259,7 +259,7 @@ public class MacrosCalculator extends AppCompatActivity {
 
 
         builder.setPositiveButton("Add", (dialog, which) -> {
-                    int selectedQuantity = getSelectedQuantity(radioGroupQuantities);
+                    int selectedQuantity = Integer.parseInt(editTextQuantity.getText().toString());
                     FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
                     if (selectedMeal != null && selectedQuantity > 0) {
                         String currentDate = dateFormat.format(calendar.getTime());
@@ -268,7 +268,7 @@ public class MacrosCalculator extends AppCompatActivity {
                                 selectedMeal.getKcal(), selectedMeal.getFats(),
                                 selectedMeal.getCarbs(), selectedMeal.getProteins(),
                                 currentDate);
-                        mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
+                        mealToAdd.calculateNutritionForQuantity(selectedQuantity);
                         mealToAdd.setDate(currentDate);
 
                                     database.foodItemDao().insertFoodItem(mealToAdd);
@@ -296,20 +296,6 @@ public class MacrosCalculator extends AppCompatActivity {
             }
         });
         dialog.show();
-    }
-
-    private int getSelectedQuantity(RadioGroup radioGroup) {
-        int selectedId = radioGroup.getCheckedRadioButtonId();
-        if (selectedId == R.id.radio200g) {
-            mealAdapter.setSelectedGrams(200);
-            return 200;
-        } else if (selectedId == R.id.radio300g) {
-            mealAdapter.setSelectedGrams(300);
-            return 300;
-        } else {
-            mealAdapter.setSelectedGrams(100);
-            return 100;
-        }
     }
 
     private FoodItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
@@ -346,9 +332,9 @@ public class MacrosCalculator extends AppCompatActivity {
 
         // Update the TextView with the total values
         txtViewTotal.setText("Total - " + totalKcal + "kcal " +
-                totalFats + "g fats " +
-                totalCarbs + "g carbs " +
-                totalProteins +"g proteins");
+                String.format("%.0f",totalFats) + "g fats " +
+                String.format("%.0f",totalCarbs) + "g carbs " +
+                String.format("%.0f",totalProteins) +"g proteins");
     }
 
     public void findViews(){
