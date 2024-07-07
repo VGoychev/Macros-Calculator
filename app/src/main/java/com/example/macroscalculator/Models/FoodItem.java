@@ -1,18 +1,29 @@
 package com.example.macroscalculator.Models;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+import java.util.Objects;
+
+@Entity(tableName = "food_items")
 public class FoodItem {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "meal_id")
     public int id;
+    @ColumnInfo(name = "meal_name")
     public String mealName;
+    @ColumnInfo(name = "meal_kcal")
     public double kcal;
+    @ColumnInfo(name = "meal_fats")
     public double fats;
+    @ColumnInfo(name = "meal_proteins")
     public double proteins;
+    @ColumnInfo(name = "meal_carbs")
     public double carbs;
+    @ColumnInfo(name = "meal_date")
     public String date;
+    @ColumnInfo(name = "meal_quantity")
     public int quantity;
 
     public FoodItem(String mealName, double kcal, double fats, double carbs, double proteins, String date) {
@@ -24,6 +35,24 @@ public class FoodItem {
         this.date = date;
         this.quantity = 100;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FoodItem foodItem = (FoodItem) o;
+
+        return id == foodItem.id &&
+                Objects.equals(mealName, foodItem.mealName) &&
+                Objects.equals(date, foodItem.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, mealName, date);
+    }
+
 
     public int getId() {
         return id;

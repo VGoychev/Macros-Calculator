@@ -10,16 +10,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.macroscalculator.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>{
     private List<FoodItem> meals;
 
     public MealAdapter(List<FoodItem> meals) {
-        this.meals = meals;
+        this.meals = new ArrayList<>(meals);
     }
     public FoodItem getMealAt(int position) {
         return meals.get(position);
+    }
+
+    public void setMeals(List<FoodItem> newMeals) {
+        this.meals = newMeals;
+        notifyDataSetChanged();
     }
 
     public void removeMeal(FoodItem foodItem) {

@@ -4,9 +4,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "food_menu_items")
 public class FoodMenuItem {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "item_id")
     public int id;
     @ColumnInfo(name = "meal_name")
     public String mealName;

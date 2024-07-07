@@ -88,6 +88,7 @@ public class MacrosCalculator extends AppCompatActivity {
     public void btnAddClick(View view){
     showAddMealDialog();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,6 @@ public class MacrosCalculator extends AppCompatActivity {
         findViews();
 
 
-
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "DB_NAME").allowMainThreadQueries().build();
         foodMenuItemDao = db.foodMenuItemDao();
@@ -122,43 +122,23 @@ public class MacrosCalculator extends AppCompatActivity {
         date = dateFormat.format(calendar.getTime());
         dateTimeDisplay.setText(date);
 
-        int height = Integer.parseInt(sp.getString("height" , ""));
-        int weight = Integer.parseInt(sp.getString("weight" , ""));
-        int age = Integer.parseInt(sp.getString("age" , ""));
-        double activity = Double.parseDouble(sp.getString("activity",""));
-        String gender= sp.getString("gender", "");
-
-        txtViewGender.setText(gender + ",");
-        txtViewAge.setText(age + " years");
-        txtViewHeight.setText(height + " cm,");
-        txtViewWeight.setText(weight + " kg");
-
-        if (gender.equalsIgnoreCase("male")) {
-            calculatedBMR = MALE_CONST + (MALE_WEIGHT_MULT * weight) + (MALE_HEIGHT_MULT * height) - (MALE_AGE_MULT * age);
-        } else if (gender.equalsIgnoreCase("female")) {
-            calculatedBMR = FEMALE_CONST + (FEMALE_WEIGHT_MULT * weight) + (FEMALE_HEIGHT_MULT * height) - (FEMALE_AGE_MULT * age);
-        }
-        double caloriesForMaintenance = Math.ceil(calculatedBMR * activity);
-        double caloriesForWeightGain = caloriesForMaintenance + 300;
-        double caloriesForWeightLoss = caloriesForMaintenance - 300;
-        txtViewMaintenance.setText("To maintain the weight: " + String.format("%.0f", caloriesForMaintenance) + " calories/day");
-        txtViewGain.setText("To gain weight: " + String.format("%.0f", caloriesForWeightGain) + " calories/day");
-        txtViewLose.setText("To lose weight: " + String.format("%.0f", caloriesForWeightLoss) + " calories/day");
+        updateUserInfoAndBMR();
 
         recyclerViewTodayMeals.setLayoutManager(new LinearLayoutManager(this));
         mealAdapter = new MealAdapter(new ArrayList<>());
         recyclerViewTodayMeals.setAdapter(mealAdapter);
 
         List<FoodItem> savedMeals = loadTodaysMealsFromDatabase();
-        for (FoodItem meal : savedMeals) {
-            mealAdapter.addMeal(meal);
-        }
+        mealAdapter.setMeals(savedMeals);
         updateTotalValues();
     }
+
     private List<FoodItem> loadTodaysMealsFromDatabase() {
         String currentDate = dateFormat.format(calendar.getTime());
-        List<FoodItem> meals = foodItemDao.getMealsByDate(currentDate);
-        Log.d("Database", "Loaded meals: " + meals.size());
+        List<FoodItem> meals = db.foodItemDao().getMealsByDate(currentDate);
+
+        Log.d("Database", "Loaded Meals: " + meals);
+
         return meals;
     }
 
@@ -186,26 +166,25 @@ public class MacrosCalculator extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_MEAL_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            String name = data.getStringExtra("name");
-            double fats = data.getDoubleExtra("fats", 0);
-            double carbs = data.getDoubleExtra("carbs", 0);
-            double proteins = data.getDoubleExtra("proteins", 0);
-            double kcal = data.getDoubleExtra("kcal", 0);
+    private void deleteMealsByDate(String date) {
+        // Delete items from the database
+        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
+        database.foodItemDao().deleteMealsByDate(date);
+        Log.d("Database", "Deleted meals for date: " + date);
 
-            FoodMenuItem newMeal = new FoodMenuItem(name, kcal, fats, carbs, proteins);
+        // Update RecyclerView
+        List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
+        mealAdapter.setMeals(updatedMeals);
+        mealAdapter.notifyDataSetChanged();
 
-            // Save to database
-            foodMenuItemDao.insert(newMeal);
-            DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(this), getApplicationContext());
-
-            // Update RecyclerView
-            menuAdapter.addMeal(newMeal);
-        }
+        // Update the total values after deletion
+        updateTotalValues();
     }
+    private void deleteTodayMeals() {
+        String currentDate = dateFormat.format(calendar.getTime());
+        deleteMealsByDate(currentDate);
+    }
+
 
 
     private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
@@ -221,17 +200,25 @@ public class MacrosCalculator extends AppCompatActivity {
             int position = viewHolder.getAdapterPosition();
             FoodItem deletedMeal = mealAdapter.getMeals().get(position);
             deleteItem(deletedMeal);
-            updateTotalValues();
-
 
         }
     }
 
     private void deleteItem(FoodItem foodItem) {
-        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
-        database.foodItemDao().delete(foodItem);
-        Log.d("Database", "Deleted meal: " + foodItem.getMealName());
-        mealAdapter.removeMeal(foodItem);
+        db = AppDatabase.getInstance(this.getApplicationContext());
+        Log.d("Database", "Attempting to delete item with ID: " + foodItem.getId());
+        List<FoodItem> beforeDeletion = db.foodItemDao().getMealsByDate(foodItem.getDate());
+        Log.d("Database", "Before Deletion: " + beforeDeletion);
+
+        db.foodItemDao().deleteMealsById(foodItem.getId());
+
+        List<FoodItem> afterDeletion = db.foodItemDao().getMealsByDate(foodItem.getDate());
+        Log.d("Database", "After Deletion: " + afterDeletion);
+
+        List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
+        Log.d("Database", "Updated Meals: " + updatedMeals);
+
+        mealAdapter.setMeals(updatedMeals);
         mealAdapter.notifyDataSetChanged();
         updateTotalValues();
     }
@@ -276,13 +263,21 @@ public class MacrosCalculator extends AppCompatActivity {
                     FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
                     if (selectedMeal != null && selectedQuantity > 0) {
                         String currentDate = dateFormat.format(calendar.getTime());
-                        FoodItem mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
+                        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
+                        FoodItem mealToAdd = new FoodItem(selectedMeal.getMealName(),
+                                selectedMeal.getKcal(), selectedMeal.getFats(),
+                                selectedMeal.getCarbs(), selectedMeal.getProteins(),
+                                currentDate);
+                        mealToAdd = calculateMealForQuantity(selectedMeal, selectedQuantity);
                         mealToAdd.setDate(currentDate);
 
-                                    foodItemDao.insert(mealToAdd);
+                                    database.foodItemDao().insertFoodItem(mealToAdd);
+                        Log.d("Database", "Inserted meal with ID: " + mealToAdd.getId());
+                        List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
+                        mealAdapter.setMeals(updatedMeals);
+                        mealAdapter.notifyDataSetChanged();
 
-                                mealAdapter.addMeal(mealToAdd);
-                                updateTotalValues();
+                        updateTotalValues();
 
                     } else {
                         Toast.makeText(this, "Please select a meal and enter a valid quantity.", Toast.LENGTH_SHORT).show();
@@ -371,5 +366,52 @@ public class MacrosCalculator extends AppCompatActivity {
         recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
         itemTouchHelper.attachToRecyclerView(recyclerViewTodayMeals);
+    }
+    private void updateUserInfoAndBMR() {
+        int height = Integer.parseInt(sp.getString("height" , ""));
+        int weight = Integer.parseInt(sp.getString("weight" , ""));
+        int age = Integer.parseInt(sp.getString("age" , ""));
+        double activity = Double.parseDouble(sp.getString("activity",""));
+        String gender = sp.getString("gender", "");
+
+        txtViewGender.setText(gender + ",");
+        txtViewAge.setText(age + " years");
+        txtViewHeight.setText(height + " cm,");
+        txtViewWeight.setText(weight + " kg");
+
+        if (gender.equalsIgnoreCase("male")) {
+            calculatedBMR = MALE_CONST + (MALE_WEIGHT_MULT * weight) + (MALE_HEIGHT_MULT * height) - (MALE_AGE_MULT * age);
+        } else if (gender.equalsIgnoreCase("female")) {
+            calculatedBMR = FEMALE_CONST + (FEMALE_WEIGHT_MULT * weight) + (FEMALE_HEIGHT_MULT * height) - (FEMALE_AGE_MULT * age);
+        }
+
+        double caloriesForMaintenance = Math.ceil(calculatedBMR * activity);
+        double caloriesForWeightGain = caloriesForMaintenance + 300;
+        double caloriesForWeightLoss = caloriesForMaintenance - 300;
+
+        txtViewMaintenance.setText("To maintain the weight: " + String.format("%.0f", caloriesForMaintenance) + " calories/day");
+        txtViewGain.setText("To gain weight: " + String.format("%.0f", caloriesForWeightGain) + " calories/day");
+        txtViewLose.setText("To lose weight: " + String.format("%.0f", caloriesForWeightLoss) + " calories/day");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_MEAL_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            String name = data.getStringExtra("name");
+            double fats = data.getDoubleExtra("fats", 0);
+            double carbs = data.getDoubleExtra("carbs", 0);
+            double proteins = data.getDoubleExtra("proteins", 0);
+            double kcal = data.getDoubleExtra("kcal", 0);
+
+            FoodMenuItem newMeal = new FoodMenuItem(name, kcal, fats, carbs, proteins);
+
+            // Save to database
+            foodMenuItemDao.insert(newMeal);
+            DefaultMeals.updateDatabase(DefaultMeals.getCurrentMeals(this), getApplicationContext());
+
+            // Update RecyclerView
+            menuAdapter.addMeal(newMeal);
+        }
     }
 }

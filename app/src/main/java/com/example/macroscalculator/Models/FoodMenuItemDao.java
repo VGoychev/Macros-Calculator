@@ -14,7 +14,7 @@ import java.util.List;
 public interface FoodMenuItemDao {
     @Update
     void updateFoodMenuItem(FoodMenuItem foodMenuItem);
-    @Query("SELECT * FROM FoodMenuItem")
+    @Query("SELECT * FROM food_menu_items")
     List<FoodMenuItem> getDefaultMeals();
 
     @Transaction
@@ -26,14 +26,9 @@ public interface FoodMenuItemDao {
     }
     @Insert
     void insert(FoodMenuItem foodMenuItem);
-    @Insert
-    void insertAll(List<FoodMenuItem> meals);
-    @Query("SELECT * FROM FoodMenuItem")
+
+    @Query("SELECT * FROM food_menu_items")
     List<FoodMenuItem> getAllMeals();
-    @Query("SELECT * FROM FoodMenuItem")
-    FoodMenuItem getMeal();
     @Delete
     void delete(FoodMenuItem foodMenuItem);
-    @Delete
-    void deleteAll(List<FoodMenuItem> meals);
 }
