@@ -1,7 +1,5 @@
 package com.example.macroscalculator;
 
-import static com.example.macroscalculator.Models.DefaultMeals.loadMealsFromDatabase;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +32,6 @@ import com.example.macroscalculator.Models.MealMenuAdapter;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,7 +41,8 @@ public class MacrosCalculator extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-    finishAffinity();
+        super.onBackPressed();
+        finishAffinity();
     }
     public static AppDatabase db;
     Button btnAdd;
@@ -223,81 +218,99 @@ public class MacrosCalculator extends AppCompatActivity {
         updateTotalValues();
     }
 
-    private void showAddMealDialog() {
-        Log.d("Dialog", "Showing add meal dialog...");
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
-        builder.setView(dialogView);
+private void showAddMealDialog() {
+    Log.d("Dialog", "Showing add meal dialog...");
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
+    LayoutInflater inflater = getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
+    builder.setView(dialogView);
 
-        EditText editTextQuantity = dialogView.findViewById(R.id.editTextQuantity);
+    EditText editTextQuantity = dialogView.findViewById(R.id.editTextQuantity);
 
-        final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
-        final ImageView imgDelete = dialogView.findViewById(R.id.imgDeleteItem);
-        RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
-        recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
+    final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
+    final ImageView imgDelete = dialogView.findViewById(R.id.imgDeleteItem);
+    RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
+    recyclerViewMeals.setLayoutManager(new LinearLayoutManager(this));
 
-        List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
+    List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
 
-        Log.d("Dialog", "Loaded " + loadedMeals.size() + " meals from database.");
+    Log.d("Dialog", "Loaded " + loadedMeals.size() + " meals from database.");
 
-        menuAdapter = new MealMenuAdapter(loadedMeals);
-        recyclerViewMeals.setAdapter(menuAdapter);
+    menuAdapter = new MealMenuAdapter(loadedMeals);
+    recyclerViewMeals.setAdapter(menuAdapter);
 
-        imgAdd.setOnClickListener(v ->{
-            Intent intent = new Intent(MacrosCalculator.this, AddNewMealToMenu.class);
-            startActivityForResult(intent, ADD_MEAL_REQUEST_CODE);
-        });
+    imgAdd.setOnClickListener(v -> {
+        Intent intent = new Intent(MacrosCalculator.this, AddNewMealToMenu.class);
+        startActivityForResult(intent, ADD_MEAL_REQUEST_CODE);
+    });
 
+    imgDelete.setOnClickListener(v -> {
+        int position = menuAdapter.getSelectedPosition(); // Replace with your logic to get selected position
+        if (position != RecyclerView.NO_POSITION) {
+            menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
+        }
+    });
 
-        imgDelete.setOnClickListener(v -> {
-            int position = menuAdapter.getSelectedPosition(); // Replace with your logic to get selected position
-            if (position != RecyclerView.NO_POSITION) {
-                menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
+    AlertDialog dialog = builder.setPositiveButton("Add", null)
+            .setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss())
+            .create();
+
+    dialog.setOnShowListener(dialogInterface -> {
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        positiveButton.setTextColor(getResources().getColor(R.color.white));
+        negativeButton.setTextColor(getResources().getColor(R.color.white));
+
+        positiveButton.setOnClickListener(v -> {
+            String quantityText = editTextQuantity.getText().toString();
+
+            if (quantityText.isEmpty()) {
+                editTextQuantity.setError("Can't be empty");
+                return; // Do not dismiss the dialog
             }
-        });
 
-
-        builder.setPositiveButton("Add", (dialog, which) -> {
-                    int selectedQuantity = Integer.parseInt(editTextQuantity.getText().toString());
-                    FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
-                    if (selectedMeal != null && selectedQuantity > 0) {
-                        String currentDate = dateFormat.format(calendar.getTime());
-                        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
-                        FoodItem mealToAdd = new FoodItem(selectedMeal.getMealName(),
-                                selectedMeal.getKcal(), selectedMeal.getFats(),
-                                selectedMeal.getCarbs(), selectedMeal.getProteins(),
-                                currentDate);
-                        mealToAdd.calculateNutritionForQuantity(selectedQuantity);
-                        mealToAdd.setDate(currentDate);
-
-                                    database.foodItemDao().insertFoodItem(mealToAdd);
-                        Log.d("Database", "Inserted meal with ID: " + mealToAdd.getId());
-                        List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
-                        mealAdapter.setMeals(updatedMeals);
-                        mealAdapter.notifyDataSetChanged();
-
-                        updateTotalValues();
-
-                    } else {
-                        Toast.makeText(this, "Please select a meal and enter a valid quantity.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button positiveButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
-                Button negativeButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                positiveButton.setTextColor(getResources().getColor(R.color.white));
-                negativeButton.setTextColor(getResources().getColor(R.color.white));
+            int selectedQuantity;
+            try {
+                selectedQuantity = Integer.parseInt(quantityText);
+            } catch (NumberFormatException e) {
+                editTextQuantity.setError("Invalid number");
+                return; // Do not dismiss the dialog
             }
-        });
-        dialog.show();
-    }
 
+            if (selectedQuantity <= 0) {
+                editTextQuantity.setError("Can't be zero");
+                return; // Do not dismiss the dialog
+            }
+
+            FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
+            if (selectedMeal == null) {
+                Toast.makeText(getApplicationContext(), "Please select a meal.", Toast.LENGTH_SHORT).show();
+                return; // Do not dismiss the dialog
+            }
+
+            String currentDate = dateFormat.format(calendar.getTime());
+            AppDatabase database = AppDatabase.getInstance(getApplicationContext());
+            FoodItem mealToAdd = new FoodItem(selectedMeal.getMealName(),
+                    selectedMeal.getKcal(), selectedMeal.getFats(),
+                    selectedMeal.getCarbs(), selectedMeal.getProteins(),
+                    currentDate);
+            mealToAdd.calculateNutritionForQuantity(selectedQuantity);
+            mealToAdd.setDate(currentDate);
+
+            database.foodItemDao().insertFoodItem(mealToAdd);
+            Log.d("Database", "Inserted meal with ID: " + mealToAdd.getId());
+            List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
+            mealAdapter.setMeals(updatedMeals);
+            mealAdapter.notifyDataSetChanged();
+
+            updateTotalValues();
+
+            dialog.dismiss(); // Dismiss the dialog only after successful addition
+        });
+    });
+
+    dialog.show();
+}
     private FoodItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
         FoodItem newMeal = new FoodItem(meal.getMealName(),
                 (meal.getKcal() * quantity) / 100,

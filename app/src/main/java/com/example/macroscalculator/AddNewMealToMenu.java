@@ -1,18 +1,11 @@
 package com.example.macroscalculator;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,38 +16,65 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.ads.nativetemplates.NativeTemplateStyle;
 import com.google.android.ads.nativetemplates.TemplateView;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
-import com.google.android.gms.ads.nativead.NativeAdOptions;
-import com.google.android.gms.ads.nativead.NativeAdView;
 
 public class AddNewMealToMenu extends AppCompatActivity {
 Button buttonAdd, buttonCancel;
 EditText editName, editFats, editCarbs, editProteins;
 
-    public void btnAddClick(View view) {
-        String name = editName.getText().toString();
-        double fats = Double.parseDouble(editFats.getText().toString());
-        double carbs = Double.parseDouble(editCarbs.getText().toString());
-        double proteins = Double.parseDouble(editProteins.getText().toString());
-        double kcal = (fats * 9) + (carbs * 4) + (proteins * 4);  // Calculate kcal based on macronutrients
+public void btnAddClick(View view) {
+    String name = editName.getText().toString();
+    String fatsText = editFats.getText().toString();
+    String carbsText = editCarbs.getText().toString();
+    String proteinsText = editProteins.getText().toString();
 
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("name", name);
-        resultIntent.putExtra("fats", fats);
-        resultIntent.putExtra("carbs", carbs);
-        resultIntent.putExtra("proteins", proteins);
-        resultIntent.putExtra("kcal", kcal);
+    boolean hasError = false;
 
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+    if (name.isEmpty()) {
+        editName.setError("Name can't be empty");
+        hasError = true;
+    } else if (isNumeric(name)) {
+        editName.setError("Name can't be a number");
+        hasError = true;
     }
+
+    if (fatsText.isEmpty()) {
+        editFats.setError("Fats can't be empty");
+        hasError = true;
+    }
+
+    if (carbsText.isEmpty()) {
+        editCarbs.setError("Carbs can't be empty");
+        hasError = true;
+    }
+
+    if (proteinsText.isEmpty()) {
+        editProteins.setError("Proteins can't be empty");
+        hasError = true;
+    }
+
+    if (hasError) {
+        return; // Stop execution if there are errors
+    }
+
+    double fats = Double.parseDouble(fatsText);
+    double carbs = Double.parseDouble(carbsText);
+    double proteins = Double.parseDouble(proteinsText);
+    double kcal = (fats * 9) + (carbs * 4) + (proteins * 4); // Calculate kcal based on macronutrients
+
+    Intent resultIntent = new Intent();
+    resultIntent.putExtra("name", name);
+    resultIntent.putExtra("fats", fats);
+    resultIntent.putExtra("carbs", carbs);
+    resultIntent.putExtra("proteins", proteins);
+    resultIntent.putExtra("kcal", kcal);
+
+    setResult(Activity.RESULT_OK, resultIntent);
+    finish();
+}
     public void btnCancelClick(View view){
         setResult(Activity.RESULT_CANCELED);
         finish();
@@ -95,5 +115,12 @@ EditText editName, editFats, editCarbs, editProteins;
         editCarbs = findViewById(R.id.editText_add_meal_carbs);
         editProteins = findViewById(R.id.editText_add_meal_proteins);
     }
-
+    private boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
