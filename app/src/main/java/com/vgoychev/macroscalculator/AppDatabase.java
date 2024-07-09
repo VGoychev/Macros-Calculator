@@ -1,4 +1,4 @@
-package com.example.macroscalculator;
+package com.vgoychev.macroscalculator;
 
 import android.content.Context;
 
@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.macroscalculator.Models.FoodItem;
-import com.example.macroscalculator.Models.FoodItemDao;
-import com.example.macroscalculator.Models.FoodMenuItem;
-import com.example.macroscalculator.Models.FoodMenuItemDao;
+import com.vgoychev.macroscalculator.Models.FoodItem;
+import com.vgoychev.macroscalculator.Models.FoodItemDao;
+import com.vgoychev.macroscalculator.Models.FoodMenuItem;
+import com.vgoychev.macroscalculator.Models.FoodMenuItemDao;
 
 
 @Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 1)

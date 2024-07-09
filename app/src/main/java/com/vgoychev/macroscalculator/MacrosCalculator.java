@@ -1,4 +1,4 @@
-package com.example.macroscalculator;
+package com.vgoychev.macroscalculator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,13 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.macroscalculator.Models.DefaultMeals;
-import com.example.macroscalculator.Models.FoodItem;
-import com.example.macroscalculator.Models.FoodItemDao;
-import com.example.macroscalculator.Models.FoodMenuItem;
-import com.example.macroscalculator.Models.FoodMenuItemDao;
-import com.example.macroscalculator.Models.MealAdapter;
-import com.example.macroscalculator.Models.MealMenuAdapter;
+import com.vgoychev.macroscalculator.Models.DefaultMeals;
+import com.vgoychev.macroscalculator.Models.FoodItem;
+import com.vgoychev.macroscalculator.Models.FoodItemDao;
+import com.vgoychev.macroscalculator.Models.FoodMenuItem;
+import com.vgoychev.macroscalculator.Models.FoodMenuItemDao;
+import com.vgoychev.macroscalculator.Models.MealAdapter;
+import com.vgoychev.macroscalculator.Models.MealMenuAdapter;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;

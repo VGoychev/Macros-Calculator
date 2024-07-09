@@ -1,4 +1,4 @@
-package com.example.macroscalculator;
+package com.vgoychev.macroscalculator;
 
 import android.content.Context;
 

@@ -1,11 +1,10 @@
-package com.example.macroscalculator.Models;
+package com.vgoychev.macroscalculator.Models;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.example.macroscalculator.AppDatabase;
-import com.example.macroscalculator.MacrosCalculator;
+import com.vgoychev.macroscalculator.AppDatabase;
+import com.vgoychev.macroscalculator.MacrosCalculator;
 
 import java.util.ArrayList;
 import java.util.List;

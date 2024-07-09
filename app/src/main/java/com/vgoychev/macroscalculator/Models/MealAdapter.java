@@ -1,4 +1,4 @@
-package com.example.macroscalculator.Models;
+package com.vgoychev.macroscalculator.Models;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.macroscalculator.R;
+import com.vgoychev.macroscalculator.R;
 
 import java.util.ArrayList;
 import java.util.List;

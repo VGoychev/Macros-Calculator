@@ -1,4 +1,4 @@
-package com.example.macroscalculator.Models;
+package com.vgoychev.macroscalculator.Models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
