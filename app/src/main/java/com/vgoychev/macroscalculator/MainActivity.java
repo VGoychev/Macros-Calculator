@@ -17,10 +17,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    @Override
-    public void onBackPressed() {
-        // Do nothing, so the back button is disabled.
-    }
+        @Override
+        public void onBackPressed() {
+            super.onBackPressed();
+            finishAffinity();
+        }
+
 
     EditText enterHeight, enterWeight, enterAge;
     private double height;
