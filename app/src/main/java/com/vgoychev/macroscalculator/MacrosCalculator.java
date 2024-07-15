@@ -46,8 +46,8 @@ public class MacrosCalculator extends AppCompatActivity {
     }
     public static AppDatabase db;
     Button btnAdd;
-    ImageView imageEdit;
-    TextView txtViewGender, txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
+    ImageView imageEdit, imgViewGender;
+    TextView  txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date;
@@ -353,7 +353,7 @@ private void showAddMealDialog() {
     public void findViews(){
         imageEdit = (ImageView) findViewById(R.id.imgViewEdit);
         btnAdd = (Button) findViewById(R.id.button_macros_add);
-        txtViewGender = (TextView) findViewById(R.id.textViewGenderValue);
+        imgViewGender = (ImageView) findViewById(R.id.imgViewGenderValue);
         txtViewAge = (TextView) findViewById(R.id.textViewAgeValue);
         txtViewHeight = (TextView) findViewById(R.id.textViewHeightValue);
         txtViewWeight = (TextView) findViewById(R.id.textViewWeightValue);
@@ -373,9 +373,13 @@ private void showAddMealDialog() {
         double activity = Double.parseDouble(sp.getString("activity",""));
         String gender = sp.getString("gender", "");
 
-        txtViewGender.setText(gender + ",");
+        if (gender.equals("Male")){
+            imgViewGender.setImageResource(R.drawable.male);
+        } else if (gender.equals("Female")) {
+            imgViewGender.setImageResource(R.drawable.female);
+        }
         txtViewAge.setText(age + " years");
-        txtViewHeight.setText(height + " cm,");
+        txtViewHeight.setText(height + " cm");
         txtViewWeight.setText(weight + " kg");
 
         if (gender.equalsIgnoreCase("male")) {
