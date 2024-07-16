@@ -10,7 +10,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="58dp"
         android:background="@color/RecipeCard"
         android:padding="2dp">
 
@@ -21,12 +21,12 @@
             <ImageView
                 android:id="@+id/imgViewGenderValue"
                 android:layout_width="22dp"
-                android:layout_height="56dp"
+                android:layout_height="58dp"
                 android:src="@drawable/female"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"/>
 
             <TextView
                 android:id="@+id/textViewHeightValue"
@@ -37,13 +37,9 @@
                 android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textViewWeightValue"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.072"
-                app:layout_constraintStart_toStartOf="parent"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="8sp"
-                app:autoSizeMaxTextSize="13sp"
-                app:autoSizeStepGranularity="1sp"/>
+                app:layout_constraintEnd_toStartOf="@id/imgViewEdit"
+                app:layout_constraintHorizontal_bias="0.238"
+                app:layout_constraintStart_toEndOf="@id/imgViewGenderValue" />
 
             <TextView
                 android:id="@+id/textViewWeightValue"
@@ -54,13 +50,9 @@
                 android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.07"
-                app:layout_constraintStart_toStartOf="parent"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="8sp"
-                app:autoSizeMaxTextSize="13sp"
-                app:autoSizeStepGranularity="1sp"/>
+                app:layout_constraintEnd_toStartOf="@id/imgViewEdit"
+                app:layout_constraintHorizontal_bias="0.196"
+                app:layout_constraintStart_toEndOf="@id/imgViewGenderValue" />
 
             <TextView
                 android:id="@+id/textViewAgeValue"
@@ -71,13 +63,11 @@
                 android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textViewHeightValue"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.072"
-                app:layout_constraintStart_toStartOf="parent"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="8sp"
-                app:autoSizeMaxTextSize="13sp"
-                app:autoSizeStepGranularity="1sp"/>
+                app:layout_constraintEnd_toStartOf="@id/imgViewEdit"
+                app:layout_constraintHorizontal_bias="0.305"
+                app:layout_constraintStart_toEndOf="@id/imgViewGenderValue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/button_macros_add"
@@ -108,7 +98,8 @@
                 android:src="@drawable/edit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button_macros_add"
-                app:layout_constraintStart_toEndOf="@+id/textViewHeightValue"
+                app:layout_constraintHorizontal_bias="0.762"
+                app:layout_constraintStart_toEndOf="@+id/imgViewGenderValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
