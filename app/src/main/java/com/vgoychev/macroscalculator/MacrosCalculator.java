@@ -161,27 +161,6 @@ public class MacrosCalculator extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void deleteMealsByDate(String date) {
-        // Delete items from the database
-        AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
-        database.foodItemDao().deleteMealsByDate(date);
-        Log.d("Database", "Deleted meals for date: " + date);
-
-        // Update RecyclerView
-        List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
-        mealAdapter.setMeals(updatedMeals);
-        mealAdapter.notifyDataSetChanged();
-
-        // Update the total values after deletion
-        updateTotalValues();
-    }
-    private void deleteTodayMeals() {
-        String currentDate = dateFormat.format(calendar.getTime());
-        deleteMealsByDate(currentDate);
-    }
-
-
-
     private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         SwipeToDeleteCallback() {
             super(0, ItemTouchHelper.LEFT);
@@ -201,17 +180,8 @@ public class MacrosCalculator extends AppCompatActivity {
 
     private void deleteItem(FoodItem foodItem) {
         db = AppDatabase.getInstance(this.getApplicationContext());
-        Log.d("Database", "Attempting to delete item with ID: " + foodItem.getId());
-        List<FoodItem> beforeDeletion = db.foodItemDao().getMealsByDate(foodItem.getDate());
-        Log.d("Database", "Before Deletion: " + beforeDeletion);
-
         db.foodItemDao().deleteMealsById(foodItem.getId());
-
-        List<FoodItem> afterDeletion = db.foodItemDao().getMealsByDate(foodItem.getDate());
-        Log.d("Database", "After Deletion: " + afterDeletion);
-
         List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
-        Log.d("Database", "Updated Meals: " + updatedMeals);
 
         mealAdapter.setMeals(updatedMeals);
         mealAdapter.notifyDataSetChanged();
@@ -219,7 +189,6 @@ public class MacrosCalculator extends AppCompatActivity {
     }
 
 private void showAddMealDialog() {
-    Log.d("Dialog", "Showing add meal dialog...");
     AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
     LayoutInflater inflater = getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
@@ -234,7 +203,6 @@ private void showAddMealDialog() {
 
     List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
 
-    Log.d("Dialog", "Loaded " + loadedMeals.size() + " meals from database.");
 
     menuAdapter = new MealMenuAdapter(loadedMeals);
     recyclerViewMeals.setAdapter(menuAdapter);
@@ -298,7 +266,6 @@ private void showAddMealDialog() {
             mealToAdd.setDate(currentDate);
 
             database.foodItemDao().insertFoodItem(mealToAdd);
-            Log.d("Database", "Inserted meal with ID: " + mealToAdd.getId());
             List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
             mealAdapter.setMeals(updatedMeals);
             mealAdapter.notifyDataSetChanged();

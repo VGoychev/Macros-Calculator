@@ -11,12 +11,13 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/RecipeCard">
+        android:background="@color/RecipeCard"
+        android:padding="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="2dp">
+            android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/imgViewGenderValue"
                 android:layout_width="22dp"
@@ -33,12 +34,16 @@
                 android:layout_height="wrap_content"
                 android:text="165 cm"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textViewWeightValue"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.086"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.072"
+                app:layout_constraintStart_toStartOf="parent"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="13sp"
+                app:autoSizeStepGranularity="1sp"/>
 
             <TextView
                 android:id="@+id/textViewWeightValue"
@@ -46,12 +51,16 @@
                 android:layout_height="wrap_content"
                 android:text="64 kg"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.083"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.07"
+                app:layout_constraintStart_toStartOf="parent"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="13sp"
+                app:autoSizeStepGranularity="1sp"/>
 
             <TextView
                 android:id="@+id/textViewAgeValue"
@@ -59,14 +68,16 @@
                 android:layout_height="wrap_content"
                 android:text="22 years"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textViewHeightValue"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.088"
+                app:layout_constraintHorizontal_bias="0.072"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="13sp"
+                app:autoSizeStepGranularity="1sp"/>
 
             <Button
                 android:id="@+id/button_macros_add"
