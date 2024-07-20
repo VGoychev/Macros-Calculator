@@ -11,6 +11,8 @@ public class FoodItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "meal_id")
     public int id;
+    @ColumnInfo(name = "meal_type")
+    public String mealType;
     @ColumnInfo(name = "meal_name")
     public String mealName;
     @ColumnInfo(name = "meal_kcal")
@@ -26,7 +28,7 @@ public class FoodItem {
     @ColumnInfo(name = "meal_quantity")
     public int quantity;
 
-    public FoodItem(String mealName, double kcal, double fats, double carbs, double proteins, String date) {
+    public FoodItem(String mealName, double kcal, double fats, double carbs, double proteins, String date, String mealType) {
         this.mealName = mealName;
         this.kcal = kcal;
         this.fats = fats;
@@ -34,6 +36,7 @@ public class FoodItem {
         this.proteins = proteins;
         this.date = date;
         this.quantity = 100;
+        this.mealType = mealType;
     }
 
     public void calculateNutritionForQuantity(int grams) {
@@ -93,6 +96,9 @@ public class FoodItem {
     public int getQuantity() {
         return quantity;
     }
+    public String getMealType(){
+        return mealType;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -100,6 +106,9 @@ public class FoodItem {
 
     public void setMealName(String mealName) {
         this.mealName = mealName;
+    }
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
     }
 
     public void setKcal(double kcal) {

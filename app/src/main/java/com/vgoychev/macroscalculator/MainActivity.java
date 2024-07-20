@@ -17,11 +17,26 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-        @Override
-        public void onBackPressed() {
-            super.onBackPressed();
-            finishAffinity();
-        }
+
+@Override
+public void onBackPressed() {
+    super.onBackPressed();
+    SharedPreferences sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sp.edit();
+    if (sp.contains("oldHeight") || sp.contains("oldWeight") || sp.contains("oldAge") || sp.contains("oldGender") || sp.contains("oldActivity")) {
+        editor.putString("height", sp.getString("oldHeight", ""));
+        editor.putString("weight", sp.getString("oldWeight", ""));
+        editor.putString("age", sp.getString("oldAge", ""));
+        editor.putString("gender", sp.getString("oldGender", ""));
+        editor.putString("activity", sp.getString("oldActivity", ""));
+        editor.remove("oldHeight");
+        editor.remove("oldWeight");
+        editor.remove("oldAge");
+        editor.remove("oldGender");
+        editor.remove("oldActivity");
+        editor.commit();
+    }
+}
 
 
     EditText enterHeight, enterWeight, enterAge;
@@ -184,6 +199,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            if (sp.contains("oldHeight") || sp.contains("oldWeight") || sp.contains("oldAge") || sp.contains("oldGender") || sp.contains("oldActivity")) {
+                enterHeight.setText(sp.getString("oldHeight", ""));
+                enterWeight.setText(sp.getString("oldWeight", ""));
+                enterAge.setText(sp.getString("oldAge", ""));
+                String oldGender = sp.getString("oldGender", "");
+                if (oldGender.equals(radioMale.getText().toString())) {
+                    radioMale.setChecked(true);
+                } else if (oldGender.equals(radioFemale.getText().toString())) {
+                    radioFemale.setChecked(true);
+                }
+                String oldActivity = sp.getString("oldActivity", "");
+                if (oldActivity.equals("1.2")) {
+                    radioButtonOpt1.setChecked(true);
+                } else if (oldActivity.equals("1.375")) {
+                    radioButtonOpt2.setChecked(true);
+                } else if (oldActivity.equals("1.55")) {
+                    radioButtonOpt3.setChecked(true);
+                } else if (oldActivity.equals("1.725")) {
+                    radioButtonOpt4.setChecked(true);
+                }
+            }
         }
     }
 }

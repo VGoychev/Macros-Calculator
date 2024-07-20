@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,12 +27,23 @@ import com.google.android.gms.ads.nativead.NativeAd;
 public class AddNewMealToMenu extends AppCompatActivity {
 Button buttonAdd, buttonCancel;
 EditText editName, editFats, editCarbs, editProteins;
+RadioGroup radioGroup;
+RadioButton radioButtonDrink, radioButtonMeal;
 
 public void btnAddClick(View view) {
     String name = editName.getText().toString();
     String fatsText = editFats.getText().toString();
     String carbsText = editCarbs.getText().toString();
     String proteinsText = editProteins.getText().toString();
+    String mealType = "";
+    if (radioButtonDrink.isChecked()){
+        mealType = radioButtonDrink.getText().toString();
+    } else if (radioButtonMeal.isChecked()) {
+        mealType = radioButtonMeal.getText().toString();
+    }
+    double fats = Double.parseDouble(fatsText);
+    double carbs = Double.parseDouble(carbsText);
+    double proteins = Double.parseDouble(proteinsText);
 
     boolean hasError = false;
 
@@ -45,9 +59,17 @@ public void btnAddClick(View view) {
         editFats.setError("Fats can't be empty");
         hasError = true;
     }
+    if (fats > 100) {
+        editFats.setError("There isn't food with more than 100g fat");
+        hasError = true;
+    }
 
     if (carbsText.isEmpty()) {
         editCarbs.setError("Carbs can't be empty");
+        hasError = true;
+    }
+    if (carbs > 100) {
+        editCarbs.setError("There isn't food with more than 100g carbs");
         hasError = true;
     }
 
@@ -55,14 +77,14 @@ public void btnAddClick(View view) {
         editProteins.setError("Proteins can't be empty");
         hasError = true;
     }
-
+    if (proteins > 90){
+        editProteins.setError("There isn't food with more than 90g protein");
+        hasError = true;
+    }
     if (hasError) {
         return; // Stop execution if there are errors
     }
 
-    double fats = Double.parseDouble(fatsText);
-    double carbs = Double.parseDouble(carbsText);
-    double proteins = Double.parseDouble(proteinsText);
     double kcal = (fats * 9) + (carbs * 4) + (proteins * 4); // Calculate kcal based on macronutrients
 
     Intent resultIntent = new Intent();
@@ -71,6 +93,7 @@ public void btnAddClick(View view) {
     resultIntent.putExtra("carbs", carbs);
     resultIntent.putExtra("proteins", proteins);
     resultIntent.putExtra("kcal", kcal);
+    resultIntent.putExtra("mealType", mealType);
 
     setResult(Activity.RESULT_OK, resultIntent);
     finish();
@@ -114,6 +137,9 @@ public void btnAddClick(View view) {
         editFats = findViewById(R.id.editText_add_meal_fats);
         editCarbs = findViewById(R.id.editText_add_meal_carbs);
         editProteins = findViewById(R.id.editText_add_meal_proteins);
+        radioGroup = findViewById(R.id.radioGroupType);
+        radioButtonDrink = findViewById(R.id.radioDrink);
+        radioButtonMeal = findViewById(R.id.radioMeal);
     }
     private boolean isNumeric(String str) {
         try {

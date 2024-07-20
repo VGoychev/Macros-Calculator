@@ -70,16 +70,29 @@ public class MacrosCalculator extends AppCompatActivity {
     final double FEMALE_HEIGHT_MULT = 3.098;
     final double FEMALE_AGE_MULT = 4.330;
     double calculatedBMR = 0;
-    public void imageEditClick(View view){
-        SharedPreferences sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
-        sp.edit().remove("height").commit();
-        sp.edit().remove("weight").commit();
-        sp.edit().remove("age").commit();
-        sp.edit().remove("gender").commit();
-        sp.edit().remove("activity").commit();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
+
+public void imageEditClick(View view) {
+    SharedPreferences sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sp.edit();
+
+    // Save old values
+    editor.putString("oldHeight", sp.getString("height", ""));
+    editor.putString("oldWeight", sp.getString("weight", ""));
+    editor.putString("oldAge", sp.getString("age", ""));
+    editor.putString("oldGender", sp.getString("gender", ""));
+    editor.putString("oldActivity", sp.getString("activity", ""));
+
+    // Remove current values
+    editor.remove("height");
+    editor.remove("weight");
+    editor.remove("age");
+    editor.remove("gender");
+    editor.remove("activity");
+    editor.commit();
+
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivity(intent);
+}
     public void btnAddClick(View view){
     showAddMealDialog();
     }
@@ -195,7 +208,7 @@ private void showAddMealDialog() {
     builder.setView(dialogView);
 
     EditText editTextQuantity = dialogView.findViewById(R.id.editTextQuantity);
-
+    TextView txtViewType = dialogView.findViewById(R.id.txtViewType);
     final ImageView imgAdd = dialogView.findViewById(R.id.imgAddNewItem);
     final ImageView imgDelete = dialogView.findViewById(R.id.imgDeleteItem);
     RecyclerView recyclerViewMeals = dialogView.findViewById(R.id.recyclerViewMeals);
@@ -204,7 +217,14 @@ private void showAddMealDialog() {
     List<FoodMenuItem> loadedMeals = loadMealsFromDatabase();
 
 
-    menuAdapter = new MealMenuAdapter(loadedMeals);
+    menuAdapter = new MealMenuAdapter(loadedMeals, meal -> {
+            String mealType = meal.getMealType();
+            if ("Drink".equals(mealType)) {
+                txtViewType.setText("ml");
+            } else if ("Meal".equals(mealType)) {
+                txtViewType.setText("g");
+            }
+        });
     recyclerViewMeals.setAdapter(menuAdapter);
 
     imgAdd.setOnClickListener(v -> {
@@ -256,12 +276,14 @@ private void showAddMealDialog() {
                 return; // Do not dismiss the dialog
             }
 
+
+
             String currentDate = dateFormat.format(calendar.getTime());
             AppDatabase database = AppDatabase.getInstance(getApplicationContext());
             FoodItem mealToAdd = new FoodItem(selectedMeal.getMealName(),
                     selectedMeal.getKcal(), selectedMeal.getFats(),
                     selectedMeal.getCarbs(), selectedMeal.getProteins(),
-                    currentDate);
+                    currentDate, selectedMeal.getMealType());
             mealToAdd.calculateNutritionForQuantity(selectedQuantity);
             mealToAdd.setDate(currentDate);
 
@@ -278,18 +300,6 @@ private void showAddMealDialog() {
 
     dialog.show();
 }
-    private FoodItem calculateMealForQuantity(FoodMenuItem meal, int quantity) {
-        FoodItem newMeal = new FoodItem(meal.getMealName(),
-                (meal.getKcal() * quantity) / 100,
-                (meal.getFats() * quantity) / 100,
-                (meal.getCarbs() * quantity) / 100,
-                (meal.getProteins() * quantity) / 100,
-                meal.getDate());
-        newMeal.setQuantity(quantity);
-        return newMeal;
-    }
-
-
     private List<FoodMenuItem> loadMealsFromDatabase() {
         return DefaultMeals.loadMealsFromDatabase(this);
 
@@ -373,8 +383,9 @@ private void showAddMealDialog() {
             double carbs = data.getDoubleExtra("carbs", 0);
             double proteins = data.getDoubleExtra("proteins", 0);
             double kcal = data.getDoubleExtra("kcal", 0);
+            String mealType = data.getStringExtra("mealType");
 
-            FoodMenuItem newMeal = new FoodMenuItem(name, kcal, fats, carbs, proteins);
+            FoodMenuItem newMeal = new FoodMenuItem(name, kcal, fats, carbs, proteins, mealType);
 
             // Save to database
             foodMenuItemDao.insert(newMeal);

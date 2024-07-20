@@ -9,6 +9,8 @@ public class FoodMenuItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "item_id")
     public int id;
+    @ColumnInfo(name = "meal_type")
+    public String mealType;
     @ColumnInfo(name = "meal_name")
     public String mealName;
     @ColumnInfo(name = "meal_kcal")
@@ -23,13 +25,14 @@ public class FoodMenuItem {
     public int quantity;
     @ColumnInfo(name = "meal_date")
     public String date;
-    public FoodMenuItem(String mealName, double kcal, double fats, double carbs, double proteins) {
+    public FoodMenuItem(String mealName, double kcal, double fats, double carbs, double proteins, String mealType) {
         this.mealName = mealName;
         this.kcal = kcal;
         this.fats = fats;
         this.carbs = carbs;
         this.proteins = proteins;
         this.quantity = 100;
+        this.mealType = mealType;
     }
     public String getMealName(){
         return mealName;
@@ -55,10 +58,15 @@ public class FoodMenuItem {
     public String getDate(){
         return date;
     }
+    public String getMealType(){
+        return mealType;
+    }
     public void setId(int id) {
         this.id = id;
     }
-
+    public void setMealType(String mealType){
+        this.mealType = mealType;
+    }
     public void setMealName(String mealName) {
         this.mealName = mealName;
     }

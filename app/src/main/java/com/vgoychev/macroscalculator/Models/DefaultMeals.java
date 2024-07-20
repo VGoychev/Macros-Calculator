@@ -17,11 +17,11 @@ public class DefaultMeals {
         List<FoodMenuItem> existingMeals = db.foodMenuItemDao().getAllMeals();
 
         if (existingMeals.isEmpty()) {
-            db.foodMenuItemDao().insert(new FoodMenuItem("Chicken Salad", 70, 4, 1, 6)); // Values per 100 grams
-            db.foodMenuItemDao().insert(new FoodMenuItem("Beef Steak", 250, 17, 1, 20));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Vegetable Stir Fry", 50, 2, 4, 2));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Protein Shake", 100, 2.5, 7.5, 12.5));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Grilled Salmon", 200, 12.5, 0, 20));
+            db.foodMenuItemDao().insert(new FoodMenuItem("Chicken Salad", 70, 4, 1, 6, "Meal")); // Values per 100 grams
+            db.foodMenuItemDao().insert(new FoodMenuItem("Beef Steak", 250, 17, 1, 20, "Meal"));
+            db.foodMenuItemDao().insert(new FoodMenuItem("Vegetable Stir Fry", 50, 2, 4, 2, "Meal"));
+            db.foodMenuItemDao().insert(new FoodMenuItem("Protein Shake", 100, 2.5, 7.5, 12.5, "Drink"));
+            db.foodMenuItemDao().insert(new FoodMenuItem("Grilled Salmon", 200, 12.5, 0, 20, "Meal"));
             currentMeals.addAll(db.foodMenuItemDao().getAllMeals());
         } else {
             currentMeals.addAll(existingMeals);

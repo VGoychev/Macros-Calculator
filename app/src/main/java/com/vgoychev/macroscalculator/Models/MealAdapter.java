@@ -39,8 +39,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     @Override
     public void onBindViewHolder(@NonNull MealAdapter.MealViewHolder holder, int position) {
         FoodItem meal = meals.get(position);
-        String mealNameWithGrams = meal.getMealName() + " (" + meal.getQuantity() + "g)";
-        holder.mealName.setText(mealNameWithGrams);
+        String unit = "g";
+        if ("Drink".equals(meal.getMealType())){
+            unit = "ml";
+        }
+        String mealNameWithUnits = meal.getMealName() + " (" + meal.getQuantity() + unit + ")";
+        holder.mealName.setText(mealNameWithUnits);
         holder.kcalTextView.setText(String.format("%.0f kcal", meal.getKcal()));
         holder.fatsTextView.setText(String.format("%.0fg fats", meal.getFats()));
         holder.carbsTextView.setText(String.format("%.0fg carbs", meal.getCarbs()));
