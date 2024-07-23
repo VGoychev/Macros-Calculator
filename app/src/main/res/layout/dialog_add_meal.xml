@@ -79,6 +79,7 @@
             android:inputType="number"
             android:textColorHint="@color/gray"
             android:textAlignment="center"
+            android:maxLength="3"
             android:textSize="20sp"
             android:textStyle="italic"/>
         <TextView

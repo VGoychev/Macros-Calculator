@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,10 +46,14 @@ public class MacrosCalculator extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
+
+    private static final String PREFS_NAME = "ShowcasePrefs";
+    private static final String KEY_FIRST_LAUNCH = "isFirstLaunch";
+
     public static AppDatabase db;
     Button btnAdd;
     ImageView imageEdit, imgViewGender;
-    TextView  txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, txtViewTotal, dateTimeDisplay;
+    TextView  txtViewAge, txtViewHeight, txtViewWeight, txtViewMaintenance, txtViewGain, txtViewLose, dateTimeDisplay, txtViewTotalKcal, txtViewTotalFats, txtViewTotalCarbs, txtViewTotalProteins;
     Calendar calendar;
     SimpleDateFormat dateFormat;
     String date;
@@ -60,6 +66,8 @@ public class MacrosCalculator extends AppCompatActivity {
     private static final int ADD_MEAL_REQUEST_CODE = 1;
 
     private AdView mAdView;
+
+    int showCaseNumber = 0;
 
     final double MALE_CONST = 88.362;
     final double MALE_WEIGHT_MULT = 13.397;
@@ -320,11 +328,10 @@ private void showAddMealDialog() {
             totalProteins += meal.getProteins();
         }
 
-        // Update the TextView with the total values
-        txtViewTotal.setText("Total - " + totalKcal + "kcal " +
-                String.format("%.0f",totalFats) + "g fats " +
-                String.format("%.0f",totalCarbs) + "g carbs " +
-                String.format("%.0f",totalProteins) +"g proteins");
+        txtViewTotalKcal.setText(totalKcal +" kcal");
+        txtViewTotalFats.setText(String.format("%.0f", totalFats) +"g fats");
+        txtViewTotalCarbs.setText(String.format("%.0f", totalCarbs) +"g carbs");
+        txtViewTotalProteins.setText(String.format("%.0f", totalProteins) +"g proteins");
     }
 
     public void findViews(){
@@ -337,7 +344,10 @@ private void showAddMealDialog() {
         txtViewMaintenance = (TextView) findViewById(R.id.maintenanceCaloriesTextView);
         txtViewGain = (TextView) findViewById(R.id.weightGainCaloriesTextView);
         txtViewLose = (TextView) findViewById(R.id.weightLossCaloriesTextView);
-        txtViewTotal = (TextView) findViewById(R.id.calculatedValues);
+        txtViewTotalKcal = (TextView) findViewById(R.id.txtViewTotalKcal);
+        txtViewTotalFats = (TextView) findViewById(R.id.txtViewTotalFats);
+        txtViewTotalCarbs = (TextView) findViewById(R.id.txtViewTotalCarbs);
+        txtViewTotalProteins = (TextView) findViewById(R.id.txtViewTotalProtein);
         dateTimeDisplay = (TextView)findViewById(R.id.text_date_display);
         recyclerViewTodayMeals = (RecyclerView) findViewById(R.id.recyclerViewTodayMeals);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
@@ -369,14 +379,15 @@ private void showAddMealDialog() {
         double caloriesForWeightGain = caloriesForMaintenance + 300;
         double caloriesForWeightLoss = caloriesForMaintenance - 300;
 
-        txtViewMaintenance.setText("To maintain the weight: " + String.format("%.0f", caloriesForMaintenance) + " calories/day");
-        txtViewGain.setText("To gain weight: " + String.format("%.0f", caloriesForWeightGain) + " calories/day");
-        txtViewLose.setText("To lose weight: " + String.format("%.0f", caloriesForWeightLoss) + " calories/day");
+        txtViewMaintenance.setText(String.format("%.0f", caloriesForMaintenance) + " kcal/day");
+        txtViewGain.setText(String.format("%.0f", caloriesForWeightGain) + " kcal/day");
+        txtViewLose.setText(String.format("%.0f", caloriesForWeightLoss) + " kcal/day");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == ADD_MEAL_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             String name = data.getStringExtra("name");
             double fats = data.getDoubleExtra("fats", 0);
