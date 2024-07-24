@@ -158,8 +158,14 @@ public void onBackPressed() {
         setContentView(R.layout.activity_main);
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        boolean isFirstStart = sp.getBoolean("isFirstStart", true);
 
-        if (sp.contains("height") && sp.contains("weight") && sp.contains("age") && sp.contains("gender") && sp.contains("activity")) {
+        String currentActivity = sp.getString("currentActivity", "MainActivity");
+        if (currentActivity.equals("Navigation")) {
+            Intent intent = new Intent(MainActivity.this, Navigation.class);
+            startActivity(intent);
+            finish();
+        } else if (sp.contains("height") && sp.contains("weight") && sp.contains("age") && sp.contains("gender") && sp.contains("activity")) {
             // Values are stored, navigate to MainMenu directly
             Intent intent = new Intent(MainActivity.this, MacrosCalculator.class);
             startActivity(intent);
@@ -194,9 +200,18 @@ public void onBackPressed() {
 
                         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                        Intent intent = new Intent(MainActivity.this, MacrosCalculator.class);
-                        startActivity(intent);
+                        if (isFirstStart) {
+                            editor = sp.edit();
+                            editor.putString("currentActivity", "Navigation");
+                            editor.apply();
+                            Intent intent = new Intent(MainActivity.this, Navigation.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(MainActivity.this, MacrosCalculator.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 }
             });

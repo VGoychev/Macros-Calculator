@@ -244,6 +244,8 @@ private void showAddMealDialog() {
         int position = menuAdapter.getSelectedPosition(); // Replace with your logic to get selected position
         if (position != RecyclerView.NO_POSITION) {
             menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
+        } else {
+            Toast.makeText(getApplicationContext(), "Please select a meal to delete.", Toast.LENGTH_SHORT).show();
         }
     });
 

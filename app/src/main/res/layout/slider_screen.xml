@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/RecipeCard"
+    android:orientation="vertical"
+    app:flow_horizontalAlign="center">
+    
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/sliderImage"
+        android:padding="54dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/add_button"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sliderTitle"
+        android:layout_marginTop="20dp"
+        android:text="@string/editMeasurementsTitle"
+        android:textColor="@color/white"
+        android:background="@color/MyFitnessDefault"
+        android:textSize="22dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins_semibold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sliderText"
+        android:layout_marginTop="50dp"
+        android:text="@string/editMeasurementsText"
+        android:textColor="@color/white"
+        android:background="@color/MyFitnessDefault"
+        android:textSize="18dp"
+        android:textAllCaps="false"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins_semibold"/>
+
+</LinearLayout>

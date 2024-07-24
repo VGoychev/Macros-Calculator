@@ -21,4 +21,14 @@
     <string name="height">Height(cm):</string>
     <string name="edit">Edit Measurements</string>
     <string name="ad_attribution">Ad</string>
+    <string name="skip">Skip</string>
+    <string name="back">Back</string>
+    <string name="editMeasurementsTitle">Edit your measurements</string>
+    <string name="addNewMealTitle">Add new meal to menu</string>
+    <string name="addButtonTitle">Click to access the menu</string>
+    <string name="addButtonText">To access the menu list of dishes just click the button!</string>
+    <string name="addNewMealText">You just ate your favourite dish that is not in the menu list?
+        \n\nThis is not a problem!\nYou can always add your favourite meal by clicking this button.</string>
+    <string name="editMeasurementsText">You can easily edit your measurements
+        by clicking on the EDIT button, located in the toolbar.</string>
 </resources>
