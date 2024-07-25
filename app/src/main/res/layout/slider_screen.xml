@@ -18,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sliderTitle"
-        android:layout_marginTop="20dp"
         android:text="@string/editMeasurementsTitle"
         android:textColor="@color/white"
         android:background="@color/MyFitnessDefault"
@@ -27,12 +26,14 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:fontFamily="@font/poppins_semibold"/>
-
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sliderText"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="@string/editMeasurementsText"
         android:textColor="@color/white"
         android:background="@color/MyFitnessDefault"
@@ -41,5 +42,6 @@
         android:textStyle="italic"
         android:textAlignment="center"
         android:fontFamily="@font/poppins_semibold"/>
+    </ScrollView>
 
 </LinearLayout>
