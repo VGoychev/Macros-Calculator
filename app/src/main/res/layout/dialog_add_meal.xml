@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:text="Menu"
+                android:text="@string/menu"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
@@ -86,7 +86,7 @@
             android:id="@+id/txtViewType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="g"
+            android:text="@string/g"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"/>

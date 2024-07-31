@@ -63,6 +63,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/enterHeight"
+        android:textSize="14dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +79,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/enterWeight"
+        android:textSize="14dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +94,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/enterAge"
+        android:textSize="14dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,7 +110,7 @@
         android:text="@string/gender"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterAge" />
@@ -130,7 +133,8 @@
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="@string/radio_male"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
 
         <RadioButton
             android:id="@+id/radioFemale"
@@ -139,7 +143,8 @@
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="@string/radio_female"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
     </RadioGroup>
 
     <TextView
@@ -148,10 +153,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="How active are you working out?"
+        android:text="@string/activeText"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -173,8 +178,9 @@
             android:layout_width="216dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="Not working out"
-            android:textColor="@color/white" />
+            android:text="@string/notActive"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
 
         <RadioButton
             android:id="@+id/option2"
@@ -182,8 +188,9 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="Slightly active (1-3 days a week)"
-            android:textColor="@color/white" />
+            android:text="@string/slightActive"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
 
         <RadioButton
             android:id="@+id/option3"
@@ -191,16 +198,18 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="Active (3-5 days a week)"
-            android:textColor="@color/white" />
+            android:text="@string/active"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
 
         <RadioButton
             android:id="@+id/option4"
             android:layout_width="216dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="Super active (6-7 days a week)"
-            android:textColor="@color/white" />
+            android:text="@string/superActive"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
     </RadioGroup>
 
     <Button

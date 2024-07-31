@@ -54,22 +54,22 @@ public void onBackPressed() {
     private boolean heightIsValid() {
         String heightStr = enterHeight.getText().toString().trim();
         if (heightStr.isEmpty()) {
-            enterHeight.setError("Can't be empty");
+            enterHeight.setError(getString(R.string.error_height_empty));
             return false;
         }
         double height;
         try {
             height = Double.parseDouble(heightStr);
         } catch (NumberFormatException e) {
-            enterHeight.setError("Invalid input");
+            enterHeight.setError(getString(R.string.error_height_invalid));
             return false;
         }
         if (height <= 0) {
-            enterHeight.setError("Can't be zero or negative");
+            enterHeight.setError(getString(R.string.error_height_zero_negative));
             return false;
         }
         if (height <= 40 || height > 250) {
-            enterHeight.setError("Must be between 40 cm and 250 cm");
+            enterHeight.setError(getString(R.string.error_height_range));
             return false;
         }
         return true;
@@ -78,22 +78,22 @@ public void onBackPressed() {
     private boolean weightIsValid() {
         String weightStr = enterWeight.getText().toString().trim();
         if (weightStr.isEmpty()) {
-            enterWeight.setError("Can't be empty");
+            enterWeight.setError(getString(R.string.error_weight_empty));
             return false;
         }
         double weight;
         try {
             weight = Double.parseDouble(weightStr);
         } catch (NumberFormatException e) {
-            enterWeight.setError("Invalid input");
+            enterWeight.setError(getString(R.string.error_weight_invalid));
             return false;
         }
         if (weight <= 0) {
-            enterWeight.setError("Can't be zero or negative");
+            enterWeight.setError(getString(R.string.error_weight_zero_negative));
             return false;
         }
         if (weight > 600) {
-            enterWeight.setError("Can't be more than 600 kg");
+            enterWeight.setError(getString(R.string.error_weight_exceed));
             return false;
         }
         return true;
@@ -102,22 +102,22 @@ public void onBackPressed() {
     private boolean ageIsValid() {
         String ageStr = enterAge.getText().toString().trim();
         if (ageStr.isEmpty()) {
-            enterAge.setError("Can't be empty");
+            enterAge.setError(getString(R.string.error_age_empty));
             return false;
         }
         double age;
         try {
             age = Double.parseDouble(ageStr);
         } catch (NumberFormatException e) {
-            enterAge.setError("Invalid input");
+            enterAge.setError(getString(R.string.error_age_invalid));
             return false;
         }
         if (age <= 0) {
-            enterAge.setError("Can't be zero or negative");
+            enterAge.setError(getString(R.string.error_age_zero_negative));
             return false;
         }
         if (age > 116) {
-            enterAge.setError("Can't be older than 116 years");
+            enterAge.setError(getString(R.string.error_age_exceed));
             return false;
         }
         return true;
@@ -125,7 +125,7 @@ public void onBackPressed() {
 
     private boolean genderIsSelected() {
         if (radioGroup.getCheckedRadioButtonId() == -1) { //checking if the user has selected a option using id
-            Toast.makeText(this, "Please select gender", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.select_gender), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (radioMale.isChecked()) {
@@ -137,7 +137,7 @@ public void onBackPressed() {
     }
     private boolean activityIsSelected(){
         if(radioGroupActivity.getCheckedRadioButtonId() == -1){
-            Toast.makeText(this, "Please select activity level", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.select_activity_level), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (radioButtonOpt1.isChecked()) {

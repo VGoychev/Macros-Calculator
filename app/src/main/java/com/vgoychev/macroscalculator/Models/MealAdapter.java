@@ -1,5 +1,6 @@
 package com.vgoychev.macroscalculator.Models;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>{
     private List<FoodItem> meals;
-
+    private Context context;
     public MealAdapter(List<FoodItem> meals) {
         this.meals = new ArrayList<>(meals);
     }
@@ -23,8 +24,9 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         return meals.get(position);
     }
 
-    public void setMeals(List<FoodItem> newMeals) {
+    public void setMeals(List<FoodItem> newMeals, Context context) {
         this.meals = newMeals;
+        this.context = context;
         notifyDataSetChanged();
     }
 
@@ -39,16 +41,16 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     @Override
     public void onBindViewHolder(@NonNull MealAdapter.MealViewHolder holder, int position) {
         FoodItem meal = meals.get(position);
-        String unit = "g";
-        if ("Drink".equals(meal.getMealType())){
-            unit = "ml";
+        String unit = context.getString(R.string.g);
+        if (context.getString(R.string.meal_type_drink).equals(meal.getMealType())){
+            unit = context.getString(R.string.ml);
         }
         String mealNameWithUnits = meal.getMealName() + " (" + meal.getQuantity() + unit + ")";
         holder.mealName.setText(mealNameWithUnits);
-        holder.kcalTextView.setText(String.format("%.0f kcal", meal.getKcal()));
-        holder.fatsTextView.setText(String.format("%.0fg fats", meal.getFats()));
-        holder.carbsTextView.setText(String.format("%.0fg carbs", meal.getCarbs()));
-        holder.proteinsTextView.setText(String.format("%.0fg proteins", meal.getProteins()));
+        holder.kcalTextView.setText(String.format("%.0f %s", meal.getKcal(), context.getString(R.string.kcal)));
+        holder.fatsTextView.setText(String.format("%.0f%s", meal.getFats(), context.getString(R.string.g_fats)));
+        holder.carbsTextView.setText(String.format("%.0f%s", meal.getCarbs(), context.getString(R.string.g_carbs)));
+        holder.proteinsTextView.setText(String.format("%.0f%s", meal.getProteins(), context.getString(R.string.g_proteins)));
     }
 
     @Override

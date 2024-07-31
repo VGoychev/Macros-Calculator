@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.vgoychev.macroscalculator.AppDatabase;
 import com.vgoychev.macroscalculator.MacrosCalculator;
+import com.vgoychev.macroscalculator.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ public class DefaultMeals {
         List<FoodMenuItem> existingMeals = db.foodMenuItemDao().getAllMeals();
 
         if (existingMeals.isEmpty()) {
-            db.foodMenuItemDao().insert(new FoodMenuItem("Chicken Salad", 70, 4, 1, 6, "Meal")); // Values per 100 grams
-            db.foodMenuItemDao().insert(new FoodMenuItem("Beef Steak", 250, 17, 1, 20, "Meal"));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Vegetable Stir Fry", 50, 2, 4, 2, "Meal"));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Protein Shake", 100, 2.5, 7.5, 12.5, "Drink"));
-            db.foodMenuItemDao().insert(new FoodMenuItem("Grilled Salmon", 200, 12.5, 0, 20, "Meal"));
+            db.foodMenuItemDao().insert(new FoodMenuItem(context.getString(R.string.chicken_salad), 70, 4, 1, 6, context.getString(R.string.meal_type_meal))); // Values per 100 grams
+            db.foodMenuItemDao().insert(new FoodMenuItem(context.getString(R.string.beef_steak), 250, 17, 1, 20, context.getString(R.string.meal_type_meal)));
+            db.foodMenuItemDao().insert(new FoodMenuItem(context.getString(R.string.vegetable_stir_fry), 50, 2, 4, 2, context.getString(R.string.meal_type_meal)));
+            db.foodMenuItemDao().insert(new FoodMenuItem(context.getString(R.string.protein_shake), 100, 2.5, 7.5, 12.5, context.getString(R.string.meal_type_drink)));
+            db.foodMenuItemDao().insert(new FoodMenuItem(context.getString(R.string.grilled_salmon), 200, 12.5, 0, 20, context.getString(R.string.meal_type_meal)));
             currentMeals.addAll(db.foodMenuItemDao().getAllMeals());
         } else {
             currentMeals.addAll(existingMeals);

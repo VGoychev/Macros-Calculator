@@ -15,7 +15,7 @@ import com.vgoychev.macroscalculator.Models.FoodMenuItem;
 import com.vgoychev.macroscalculator.Models.FoodMenuItemDao;
 
 
-@Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 1)
+@Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FoodItemDao foodItemDao();
     public abstract FoodMenuItemDao foodMenuItemDao();
@@ -25,6 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if(INSTANCE == null){
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "DB_NAME")
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;

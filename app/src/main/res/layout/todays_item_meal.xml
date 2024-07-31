@@ -24,7 +24,7 @@
             android:layout_marginTop="4dp"
             android:text="Meal Name"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
     <LinearLayout
         android:id="@+id/linear"
@@ -38,8 +38,9 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Kcal"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:layout_marginStart="10dp"
             android:padding="2dp" />
         <TextView
@@ -48,6 +49,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Fats"
+            android:textAlignment="center"
             android:textSize="14dp"
             android:padding="2dp"
             android:textColor="@color/white"/>
@@ -57,6 +59,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Carbs"
+        android:textAlignment="center"
         android:textSize="14dp"
         android:padding="2dp"
         android:textColor="@color/white"/>
@@ -66,6 +69,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Proteins"
+        android:textAlignment="center"
         android:textSize="14dp"
         android:padding="2dp"
         android:textColor="@color/white"/>

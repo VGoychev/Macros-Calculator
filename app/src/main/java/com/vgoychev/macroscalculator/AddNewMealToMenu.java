@@ -31,55 +31,64 @@ RadioGroup radioGroup;
 RadioButton radioButtonDrink, radioButtonMeal;
 
 public void btnAddClick(View view) {
-    String name = editName.getText().toString();
-    String fatsText = editFats.getText().toString();
-    String carbsText = editCarbs.getText().toString();
-    String proteinsText = editProteins.getText().toString();
+    String name = editName.getText().toString().trim();
+    String fatsText = editFats.getText().toString().trim();
+    String carbsText = editCarbs.getText().toString().trim();
+    String proteinsText = editProteins.getText().toString().trim();
     String mealType = "";
     if (radioButtonDrink.isChecked()){
         mealType = radioButtonDrink.getText().toString();
     } else if (radioButtonMeal.isChecked()) {
         mealType = radioButtonMeal.getText().toString();
     }
-    double fats = Double.parseDouble(fatsText);
-    double carbs = Double.parseDouble(carbsText);
-    double proteins = Double.parseDouble(proteinsText);
+    double fats = 0;
+    double carbs = 0;
+    double proteins = 0;
 
     boolean hasError = false;
 
     if (name.isEmpty()) {
-        editName.setError("Name can't be empty");
+        editName.setError(getString(R.string.error_name_empty));
         hasError = true;
     } else if (isNumeric(name)) {
-        editName.setError("Name can't be a number");
+        editName.setError(getString(R.string.error_name_numeric));
         hasError = true;
     }
 
     if (fatsText.isEmpty()) {
-        editFats.setError("Fats can't be empty");
+        editFats.setError(getString(R.string.error_fats_empty));
         hasError = true;
     }
-    if (fats > 100) {
-        editFats.setError("There isn't food with more than 100g fat");
-        hasError = true;
+    else {
+        fats = Double.parseDouble(fatsText);
+        if (fats > 100) {
+            editFats.setError(getString(R.string.error_fats_exceed));
+            hasError = true;
+        }
     }
 
     if (carbsText.isEmpty()) {
-        editCarbs.setError("Carbs can't be empty");
+        editCarbs.setError(getString(R.string.error_carbs_empty));
         hasError = true;
     }
-    if (carbs > 100) {
-        editCarbs.setError("There isn't food with more than 100g carbs");
-        hasError = true;
+    else {
+        carbs = Double.parseDouble(carbsText);
+        if (carbs > 100) {
+            editCarbs.setError(getString(R.string.error_carbs_exceed));
+            hasError = true;
+        }
     }
 
     if (proteinsText.isEmpty()) {
-        editProteins.setError("Proteins can't be empty");
+        editProteins.setError(getString(R.string.error_proteins_empty));
         hasError = true;
     }
-    if (proteins > 90){
-        editProteins.setError("There isn't food with more than 90g protein");
-        hasError = true;
+    else {
+        proteins = Double.parseDouble(proteinsText);
+        if (proteins > 90) {
+            editProteins.setError(getString(R.string.error_proteins_exceed));
+            hasError = true;
+        }
     }
     if (hasError) {
         return; // Stop execution if there are errors

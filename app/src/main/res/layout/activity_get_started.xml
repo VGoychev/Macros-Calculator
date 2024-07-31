@@ -12,20 +12,20 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:id="@+id/sliderImage"
         android:padding="36dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/healthy"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/startTitle"
-        android:layout_marginTop="50dp"
-        android:text="Nutrition counting\nsimplified."
+        android:layout_marginTop="30dp"
+        android:text="@string/get_started"
         android:textColor="@color/white"
         android:background="@color/MyFitnessDefault"
-        android:textSize="25dp"
+        android:textSize="22dp"
         android:textAllCaps="true"
         android:textStyle="bold"
         android:textAlignment="center"
@@ -34,17 +34,17 @@
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="180dp"
-        android:layout_height="60dp"
+        android:layout_width="160dp"
+        android:layout_height="46dp"
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/gray"
         android:fontFamily="@font/poppins_semibold"
         android:padding="8dp"
-        android:text="Get started"
+        android:text="@string/btnGetStarted"
         android:layout_gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="20dp"
-        android:layout_marginTop="60dp"/>
+        android:textSize="18dp"
+        android:layout_marginTop="40dp"/>
 
 </LinearLayout>

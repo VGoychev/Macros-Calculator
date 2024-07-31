@@ -102,7 +102,7 @@ public void imageEditClick(View view) {
     startActivity(intent);
 }
     public void btnAddClick(View view){
-    showAddMealDialog();
+    showAddMealDialog(this);
     }
 
     @Override
@@ -145,7 +145,7 @@ public void imageEditClick(View view) {
         recyclerViewTodayMeals.setAdapter(mealAdapter);
 
         List<FoodItem> savedMeals = loadTodaysMealsFromDatabase();
-        mealAdapter.setMeals(savedMeals);
+        mealAdapter.setMeals(savedMeals, getApplicationContext());
         updateTotalValues();
     }
 
@@ -204,12 +204,12 @@ public void imageEditClick(View view) {
         db.foodItemDao().deleteMealsById(foodItem.getId());
         List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
 
-        mealAdapter.setMeals(updatedMeals);
+        mealAdapter.setMeals(updatedMeals, getApplicationContext());
         mealAdapter.notifyDataSetChanged();
         updateTotalValues();
     }
 
-private void showAddMealDialog() {
+private void showAddMealDialog(Context context) {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
     LayoutInflater inflater = getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_add_meal, null);
@@ -227,10 +227,14 @@ private void showAddMealDialog() {
 
     menuAdapter = new MealMenuAdapter(loadedMeals, meal -> {
             String mealType = meal.getMealType();
-            if ("Drink".equals(mealType)) {
-                txtViewType.setText("ml");
-            } else if ("Meal".equals(mealType)) {
-                txtViewType.setText("g");
+
+        Log.d("MealType", "MealType: " + mealType);
+        Log.d("MealType", "Expected Drink: " + context.getString(R.string.meal_type_drink));
+        Log.d("MealType", "Expected Meal: " + context.getString(R.string.meal_type_meal));
+            if (context.getString(R.string.meal_type_drink).equals(mealType)) {
+                txtViewType.setText(context.getString(R.string.ml));
+            } else if (context.getString(R.string.meal_type_meal).equals(mealType)) {
+                txtViewType.setText(context.getString(R.string.g));
             }
         });
     recyclerViewMeals.setAdapter(menuAdapter);
@@ -245,12 +249,12 @@ private void showAddMealDialog() {
         if (position != RecyclerView.NO_POSITION) {
             menuAdapter.removeMeal(position, MacrosCalculator.this); // Remove from adapter
         } else {
-            Toast.makeText(getApplicationContext(), "Please select a meal to delete.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.select_meal_delete), Toast.LENGTH_SHORT).show();
         }
     });
 
-    AlertDialog dialog = builder.setPositiveButton("Add", null)
-            .setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss())
+    AlertDialog dialog = builder.setPositiveButton(context.getString(R.string.add), null)
+            .setNegativeButton(context.getString(R.string.cancel), (dialogInterface, which) -> dialogInterface.dismiss())
             .create();
 
     dialog.setOnShowListener(dialogInterface -> {
@@ -263,7 +267,7 @@ private void showAddMealDialog() {
             String quantityText = editTextQuantity.getText().toString();
 
             if (quantityText.isEmpty()) {
-                editTextQuantity.setError("Can't be empty");
+                editTextQuantity.setError(getString(R.string.error_empty));
                 return; // Do not dismiss the dialog
             }
 
@@ -271,18 +275,18 @@ private void showAddMealDialog() {
             try {
                 selectedQuantity = Integer.parseInt(quantityText);
             } catch (NumberFormatException e) {
-                editTextQuantity.setError("Invalid number");
+                editTextQuantity.setError(getString(R.string.error_invalid_number));
                 return; // Do not dismiss the dialog
             }
 
             if (selectedQuantity <= 0) {
-                editTextQuantity.setError("Can't be zero");
+                editTextQuantity.setError(getString(R.string.error_zero));
                 return; // Do not dismiss the dialog
             }
 
             FoodMenuItem selectedMeal = menuAdapter.getSelectedMeal();
             if (selectedMeal == null) {
-                Toast.makeText(getApplicationContext(), "Please select a meal.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.select_meal), Toast.LENGTH_SHORT).show();
                 return; // Do not dismiss the dialog
             }
 
@@ -299,7 +303,7 @@ private void showAddMealDialog() {
 
             database.foodItemDao().insertFoodItem(mealToAdd);
             List<FoodItem> updatedMeals = loadTodaysMealsFromDatabase();
-            mealAdapter.setMeals(updatedMeals);
+            mealAdapter.setMeals(updatedMeals, context);
             mealAdapter.notifyDataSetChanged();
 
             updateTotalValues();
@@ -330,10 +334,10 @@ private void showAddMealDialog() {
             totalProteins += meal.getProteins();
         }
 
-        txtViewTotalKcal.setText(totalKcal +" kcal");
-        txtViewTotalFats.setText(String.format("%.0f", totalFats) +"g fats");
-        txtViewTotalCarbs.setText(String.format("%.0f", totalCarbs) +"g carbs");
-        txtViewTotalProteins.setText(String.format("%.0f", totalProteins) +"g proteins");
+        txtViewTotalKcal.setText(totalKcal + " " + getString(R.string.kcal1));
+        txtViewTotalFats.setText(String.format("%.0f", totalFats) + getString(R.string.g_fats1));
+        txtViewTotalCarbs.setText(String.format("%.0f", totalCarbs) + getString(R.string.g_carbs1));
+        txtViewTotalProteins.setText(String.format("%.0f", totalProteins) + getString(R.string.g_proteins1));
     }
 
     public void findViews(){
@@ -362,18 +366,18 @@ private void showAddMealDialog() {
         double activity = Double.parseDouble(sp.getString("activity",""));
         String gender = sp.getString("gender", "");
 
-        if (gender.equals("Male")){
+        if (gender.equals(getString(R.string.male))){
             imgViewGender.setImageResource(R.drawable.male);
-        } else if (gender.equals("Female")) {
+        } else if (gender.equals(getString(R.string.female))) {
             imgViewGender.setImageResource(R.drawable.female);
         }
-        txtViewAge.setText(age + " years");
-        txtViewHeight.setText(height + " cm");
-        txtViewWeight.setText(weight + " kg");
+        txtViewAge.setText(age + " " + getString(R.string.years));
+        txtViewHeight.setText(height + " " + getString(R.string.cm));
+        txtViewWeight.setText(weight + " " + getString(R.string.kg));
 
-        if (gender.equalsIgnoreCase("male")) {
+        if (gender.equalsIgnoreCase(getString(R.string.male))) {
             calculatedBMR = MALE_CONST + (MALE_WEIGHT_MULT * weight) + (MALE_HEIGHT_MULT * height) - (MALE_AGE_MULT * age);
-        } else if (gender.equalsIgnoreCase("female")) {
+        } else if (gender.equalsIgnoreCase(getString(R.string.female))) {
             calculatedBMR = FEMALE_CONST + (FEMALE_WEIGHT_MULT * weight) + (FEMALE_HEIGHT_MULT * height) - (FEMALE_AGE_MULT * age);
         }
 
@@ -381,9 +385,9 @@ private void showAddMealDialog() {
         double caloriesForWeightGain = caloriesForMaintenance + 300;
         double caloriesForWeightLoss = caloriesForMaintenance - 300;
 
-        txtViewMaintenance.setText(String.format("%.0f", caloriesForMaintenance) + " kcal/day");
-        txtViewGain.setText(String.format("%.0f", caloriesForWeightGain) + " kcal/day");
-        txtViewLose.setText(String.format("%.0f", caloriesForWeightLoss) + " kcal/day");
+        txtViewMaintenance.setText(String.format("%.0f", caloriesForMaintenance) + " " + getString(R.string.kcal_per_day));
+        txtViewGain.setText(String.format("%.0f", caloriesForWeightGain) + " " + getString(R.string.kcal_per_day));
+        txtViewLose.setText(String.format("%.0f", caloriesForWeightLoss) + " " + getString(R.string.kcal_per_day));
     }
 
     @Override
