@@ -29,9 +29,9 @@
     <string name="slightActive">Леко активно (1–3 дни в седмицата)</string>
     <string name="active">Активно (3–5 дни в седмицата)</string>
     <string name="superActive">Супер активно (6–7 дни в седмицата)</string>
-    <string name="toMaintain">Поддържане на кг</string>
-    <string name="toLose">Сваляне на кг</string>
-    <string name="toGain">Покачване на кг</string>
+    <string name="toMaintain">Поддържане\nна кг</string>
+    <string name="toLose">Сваляне\nна кг</string>
+    <string name="toGain">Покачване\nна кг</string>
     <string name="total">ОБЩО</string>
     <string name="todaysMeals">Днешните ястия</string>
     <string name="menu">Меню</string>
@@ -44,17 +44,17 @@
     <string name="years"> години</string>
     <string name="cm"> см</string>
     <string name="kg"> кг</string>
-    <string name="kcal_per_day"> kcal/ден</string>
+    <string name="kcal_per_day"> ккал/ден</string>
     <string name="male">Мъж</string>
     <string name="female">Жена</string>
-    <string name="kcal">\nкалории</string>
+    <string name="kcal">\nккал</string>
     <string name="g_fats">г\nмазнини</string>
     <string name="g_carbs">г\nвъглехидрати</string>
     <string name="g_proteins">г\nбелтъчини</string>
-    <string name="kcal1">калории</string>
-    <string name="g_fats1">г мазнини</string>
-    <string name="g_carbs1">г въглехидрати</string>
-    <string name="g_proteins1">г белтъчини</string>
+    <string name="kcal1">ккал</string>
+    <string name="g_fats1">г\nмазнини</string>
+    <string name="g_carbs1">г\nвъглехидрати</string>
+    <string name="g_proteins1">г\nбелтъчини</string>
     <string name="error_empty">Не може да бъде празно</string>
     <string name="error_invalid_number">Невалидно число</string>
     <string name="error_zero">Не може да бъде нула</string>
@@ -91,4 +91,7 @@
     <string name="error_age_invalid">Невалидна стойност</string>
     <string name="error_age_zero_negative">Не може да бъде нула или отрицателно</string>
     <string name="error_age_exceed">Не може да бъде по-възрастен от 116 години</string>
+    <string name="next">Следващ</string>
+    <string name="finish">Приключи</string>
+
 </resources>

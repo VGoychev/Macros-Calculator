@@ -51,9 +51,9 @@
     <string name="g_carbs">g\ncarbs</string>
     <string name="g_proteins">g\nproteins</string>
     <string name="kcal1">kcal</string>
-    <string name="g_fats1">g fats</string>
-    <string name="g_carbs1">g carbs</string>
-    <string name="g_proteins1">g proteins</string>
+    <string name="g_fats1">g\nfats</string>
+    <string name="g_carbs1">g\ncarbs</string>
+    <string name="g_proteins1">g\nproteins</string>
     <string name="error_empty">Can\'t be empty</string>
     <string name="error_invalid_number">Invalid number</string>
     <string name="error_zero">Can\'t be zero</string>
@@ -90,5 +90,7 @@
     <string name="error_age_invalid">Invalid input</string>
     <string name="error_age_zero_negative">Can\'t be zero or negative</string>
     <string name="error_age_exceed">Can\'t be older than 116 years</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
 </resources>
