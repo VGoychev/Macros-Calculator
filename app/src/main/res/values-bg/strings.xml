@@ -33,7 +33,6 @@
     <string name="toLose">Сваляне\nна кг</string>
     <string name="toGain">Покачване\nна кг</string>
     <string name="total">ОБЩО</string>
-    <string name="todaysMeals">Днешните ястия</string>
     <string name="menu">Меню</string>
     <string name="chicken_salad">Пилешка салата</string>
     <string name="beef_steak">Телешка пържола</string>
@@ -93,5 +92,11 @@
     <string name="error_age_exceed">Не може да бъде по-възрастен от 116 години</string>
     <string name="next">Следващ</string>
     <string name="finish">Приключи</string>
-
+    <string name="select_category">Моля изберете категория - Закуска, Обяд, Вечеря</string>
+    <string name="breakfast">Закуска</string>
+    <string name="lunch">Обяд</string>
+    <string name="dinner">Вечеря</string>
+    <string name="breakfastAdd">Добави своята закуска като натиснеш бутона +</string>
+    <string name="lunchAdd">Добави своят обяд като натиснеш бутона +</string>
+    <string name="dinnerAdd">Добави своята вечеря като натиснеш бутона +</string>
 </resources>

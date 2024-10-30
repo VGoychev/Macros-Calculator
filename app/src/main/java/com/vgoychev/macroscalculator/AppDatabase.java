@@ -2,20 +2,17 @@ package com.vgoychev.macroscalculator;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.vgoychev.macroscalculator.Models.FoodItem;
-import com.vgoychev.macroscalculator.Models.FoodItemDao;
-import com.vgoychev.macroscalculator.Models.FoodMenuItem;
-import com.vgoychev.macroscalculator.Models.FoodMenuItemDao;
+import com.vgoychev.macroscalculator.model.FoodItem;
+import com.vgoychev.macroscalculator.dao.FoodItemDao;
+import com.vgoychev.macroscalculator.model.FoodMenuItem;
+import com.vgoychev.macroscalculator.dao.FoodMenuItemDao;
 
 
-@Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 2)
+@Database(entities = {FoodItem.class, FoodMenuItem.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FoodItemDao foodItemDao();
     public abstract FoodMenuItemDao foodMenuItemDao();
@@ -25,7 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if(INSTANCE == null){
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "DB_NAME")
                     .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(new MigrationFrom2To3())
                     .build();
         }
         return INSTANCE;
