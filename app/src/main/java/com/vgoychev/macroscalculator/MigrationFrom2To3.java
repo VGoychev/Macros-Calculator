@@ -9,9 +9,7 @@ public class MigrationFrom2To3 extends Migration {
 
     @Override
     public void migrate(SupportSQLiteDatabase database) {
-        // Add your SQL statements to update the schema here.
-        // For example, if you need to add a new column:
-        // database.execSQL("ALTER TABLE YourEntity ADD COLUMN new_column_name TYPE");
+
         database.execSQL("ALTER TABLE food_items ADD COLUMN meal_category TEXT DEFAULT 'Unknown'");
     }
 }
