@@ -32,7 +32,6 @@
     <string name="toLose">To lose weight</string>
     <string name="toGain">To gain weight</string>
     <string name="total">TOTAL</string>
-    <string name="todaysMeals">Today\'s meals</string>
     <string name="menu">Menu</string>
     <string name="chicken_salad">Chicken Salad</string>
     <string name="beef_steak">Beef Steak</string>
@@ -92,5 +91,11 @@
     <string name="error_age_exceed">Can\'t be older than 116 years</string>
     <string name="next">Next</string>
     <string name="finish">Finish</string>
-
+    <string name="select_category">Please select category - Breakfast, Lunch, Dinner</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="breakfastAdd">Add your breakfast by clicking the +</string>
+    <string name="lunchAdd">Add your lunch by clicking the +</string>
+    <string name="dinnerAdd">Add your dinner by clicking the +</string>
 </resources>

@@ -10,14 +10,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.vgoychev.macroscalculator.Models.ViewPagerAdapter;
+import com.vgoychev.macroscalculator.adapters.ViewPagerAdapter;
 
 public class Navigation extends AppCompatActivity {
     ViewPager slideViewPager;
